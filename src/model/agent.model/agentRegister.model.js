@@ -1,0 +1,31 @@
+import {agent_registration, merchant_registration, verified_merchant} from "../../db/schema.js";
+import {eq} from "drizzle-orm";
+import {db} from "../../config/db.js";
+
+export const getAgentByEmail = async (email) => {
+    return db.select().from(agent_registration).where(eq(agent_registration.agent_email,email))
+}
+
+export const registerAgent = async (agent) => {
+    return db.insert(agent_registration).values([agent]);
+}
+
+export const approveMerchant = async (agent_email,merchant_email) => {
+    return db.update(merchant_registration).
+        set({isVerified: true})
+        .where(eq(merchant_registration.email,merchant_email));
+}
+
+export const insertVerifiedMerchant = async (agent_email,merchant_email) => {
+    return db.insert(verified_merchant).values(agent_email,merchant_email);
+}
+
+export const selectData = async () =>{
+    return db.select({
+        agent_name: agent_registration.agent_name,
+        merchant_name: merchant_registration.contactName,
+    })
+        .from(verified_merchant)
+        .innerJoin(agent_registration, eq(verified_merchant.agent_email, agent_registration.agent_email))
+        .innerJoin(merchant_registration, eq(verified_merchant.merchant_email, merchant_registration.email));
+}
