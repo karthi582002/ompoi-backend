@@ -106,7 +106,7 @@ export const test_join = async (req, res) => {
 
         // Send successful response
         return res.status(200).json({
-            success: true,
+            // success: true,
             data: result
         });
     } catch (error) {
