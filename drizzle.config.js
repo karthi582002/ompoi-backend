@@ -12,8 +12,8 @@ export default defineConfig({
     // },
     dbCredentials: {
         host: "127.0.0.1",
-        user: "karthi",
-        database: "karthi_college",
-        password:'K.582002',
+        user: "root",
+        database: "project",
+        password:'j6*a3S69989778',
         port:'3306'
     }});
