@@ -1,6 +1,7 @@
 import {checkVerifiedStatus, createUser, getUserByEmail, registerMerchant} from "../model/register.model.js";
 // import generateToken from "../utils/generateToken..js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 
 // checks the user when register with unique email
@@ -24,7 +25,6 @@ export const checkUser = async(req,res) => {
         res.status(409).json({
             message: "User already exists",
         })
-
     }catch(err) {
         console.error(err);
         res.status(500).json({
@@ -64,14 +64,27 @@ export const register = async (req, res ) => {
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     try {
+        const otpToken = req.cookies.otpToken;
         const data = req.body;
         data.password = hashedPassword;
-        const userExist = await getUserByEmail(data.email);``
+        if (!otpToken) {
+            return res.status(401).json({ message: "OTP validation required" });
+        }
+        let phone;
+        try {
+            const decoded = jwt.verify(otpToken, process.env.JWT_SECRET);
+            phone = decoded.contactPhone;
+        } catch (err) {
+            console.log(err)
+            return res.status(401).json({ message: "Invalid or expired OTP token" });
+        }
+        const userExist = await getUserByEmail(data.email);
         if (userExist.length !== 0) {
             return res.status(400).json({
                 message: 'User already exists',
             })
         }
+        req.body.contactPhone = phone;
         const result = await registerMerchant(req.body);
         console.log(result);
         res.status(201).json({

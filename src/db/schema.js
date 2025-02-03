@@ -12,7 +12,7 @@ export const merchant_registration = mysqlTable("merchant_registration", {
     companyName: varchar("companyName",{length : 50}).notNull(),
     contactName: varchar("contactName",{length : 50}).notNull(),
     sellerCategory: varchar("sellerCategory",{length : 30}).notNull(),
-    contactPhone: varchar("contactPhone",{length : 10}).unique().notNull(),
+    contactPhone: varchar("contactPhone",{length : 13}).unique().notNull(),
     contactAltPhone: varchar("contactAltPhone",{length : 10}).notNull(),
     gstNumber: varchar("gstNumber",{length : 255}).unique().notNull(),
     email: varchar("email",{length : 100}).primaryKey().notNull(),
@@ -35,5 +35,6 @@ export const agent_registration = mysqlTable("agent_registration", {
 export const verified_merchant = mysqlTable("verified_merchant", {
     id: serial("id").autoincrement(),
     agent_email : varchar("agent_email",{length : 255}).notNull().references(()=> agent_registration.agent_email,{onDelete : "cascade"}),
-    merchant_email : varchar("merchant_email",{length : 255}).notNull().references(()=> merchant_regstration.email,{onDelete : "cascade"}),
+    merchant_email : varchar("merchant_email",{length : 255}).notNull().references(()=> merchant_registration.email,{onDelete : "cascade"}),
 })
+
