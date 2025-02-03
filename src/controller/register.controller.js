@@ -34,30 +34,54 @@ export const checkUser = async(req,res) => {
 }
 
 export const emailPassCheck = async (req, res) => {
-    const {email,password} = req.body;
-    if(!email || !password){
-        return res.status(400).json({
-            error: "Email is required",
-        })
+    try {
+        const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return res.status(400).json({
+                error: "Email and password is required",
+            });
+        }
+        
+        const user = await getUserByEmail(email);
+        
+        if (!user || user.length === 0) {
+            return res.status(404).json({
+                error: "User Not Found",
+            });
+        }
+        
+        console.log(user[0].password);
+        
+        const isPasswordValid = await bcrypt.compare(password, user[0].password || "");
+        
+        if (!isPasswordValid) {
+            return res.status(400).json({
+                error: "Password is Incorrect",
+            });
+        }
+        
+        try {
+            const status = await checkVerifiedStatus(email);
+            const result = status[0]?.isVerified;
+            
+            return res.status(200).json({ message: 'User verified', result });
+        } catch (verificationError) {
+            console.error("Error checking verification status:", verificationError);
+            return res.status(500).json({
+                error: "Internal Server Error while verifying status",
+            });
+        }
+        
+    } catch (error) {
+        console.error("Error in emailPassCheck:", error);
+        return res.status(500).json({
+            error: "Internal Server Error",
+        });
     }
-    const user = await getUserByEmail(email);
-    if (user.length === 0){
-        return res.status(404).json({
-            error: "User Not Found",
-        })
-    }
-    console.log(user[0].password);
-    const isPasswordValid =await bcrypt.compare(password,user[0].password || " ");
-    if(!isPasswordValid){
-        return res.status(400).json({
-            error: "Password is Incorrect",
-        })
-    }
-    const status = await checkVerifiedStatus(email);
-    const result = status[0].isVerified;
+};
 
-    res.status(200).json({message: 'User verified',result});
-}
+
 
 export const register = async (req, res ) => {
     const salt = await bcrypt.genSalt(12);
