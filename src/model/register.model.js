@@ -29,3 +29,8 @@ export const getUserByEmail = async (email) => {
 export const checkVerifiedStatus = async (email) => {
     return db.select({isVerified:merchant_registration.isVerified}).from(merchant_registration).where(eq(merchant_registration.email, email));
 }
+export const changeMerchantPassword = async (email,newPassword) => {
+    return db.update(merchant_registration).
+        set({password:newPassword})
+        .where(eq(merchant_registration.email, email));
+}

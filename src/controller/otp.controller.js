@@ -1,6 +1,7 @@
 import twilio from "twilio";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import {getUserByEmail} from "../model/register.model.js";
 
 dotenv.config(); // Load .env variables
 
@@ -101,5 +102,48 @@ export const verifyOtp = async (req, res) => {
             message: "Internal server error",
             error: error.message,
         });
+    }
+};
+
+
+
+// send otp using email for password resetting
+
+export const sendOtpUsingEmail = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                error: "Email is required",
+            })
+        }
+
+        const user = await getUserByEmail(email);
+        if (user.lenght === 0) {
+            return res.status(401).json({
+                error: "User Not Found",
+            })
+        }
+        const phoneNumber = user[0].contactPhone;
+        console.log(phoneNumber);
+
+        const result = await client.verify.v2.services("VA035ad869bddea5c6b7532706ec95cefe")
+            .verifications.create({
+                channel: "sms",
+                to: phoneNumber,
+            });
+
+        console.log("OTP Sent:", result);
+
+        return res.status(200).json({
+            success: true,
+            message: "OTP sent successfully",
+            sid: result.sid,
+        });
+
+    } catch (error) {
+        console.error("Error sending OTP:", error);
+        return res.status(500).json({ success: false, error: "Failed to send OTP" });
     }
 };

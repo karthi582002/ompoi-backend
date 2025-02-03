@@ -1,8 +1,18 @@
-import {checkVerifiedStatus, createUser, getUserByEmail, registerMerchant} from "../model/register.model.js";
+import {
+    changeMerchantPassword,
+    checkVerifiedStatus,
+    createUser,
+    getUserByEmail,
+    registerMerchant
+} from "../model/register.model.js";
 // import generateToken from "../utils/generateToken..js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import * as assert from "node:assert";
+import {sendOtp} from "./otp.controller.js";
+import twilio from "twilio";
 
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 // checks the user when register with unique email
 export const checkUser = async(req,res) => {
@@ -119,3 +129,66 @@ export const register = async (req, res ) => {
         res.status(500).json({ error: "Error adding user" });
     }
 };
+
+export const forgetPassword = async (req, res) => {
+    try{
+        const {email,newPassword,otp} = req.body;
+        if (!email || !newPassword || !otp) {
+            return res.status(400).json({
+                error: "Enter all the Fields",
+            })
+        }
+        const user = await getUserByEmail(email);
+        if (user.lenght === 0) {
+            return res.status(401).json({
+                error: "User Not Found",
+            })
+        }
+        const phoneNumber = user[0].contactPhone;
+        console.log(phoneNumber);
+
+        const result = await client.verify.v2
+            .services("VA035ad869bddea5c6b7532706ec95cefe")
+            .verificationChecks.create({
+                to: phoneNumber,
+                code: otp,
+            });
+        if (result.status === "approved") {
+            const salt = await bcrypt.genSalt(12);
+            const hashedPassword = await bcrypt.hash(newPassword, salt);
+            await changeMerchantPassword(email, hashedPassword);
+            return res.status(200).json({
+                message: 'Password Changed Successfull',
+            })
+        }
+        return res.status(400).json({
+            success: false,
+            message: "Invalid OTP. Please try again.",
+        });
+    } catch (error) {
+        console.error("Error in OTP verification:", error);
+        // Handle Twilio-specific errors
+        if (error.code === 20404) {
+            return res.status(404).json({
+                success: false,
+                message: "Verification service not found. Check the Service SID.",
+                moreInfo: error.moreInfo,
+            });
+        }
+
+        // Handle Rate Limit Exceeded
+        if (error.code === 60203) {
+            return res.status(429).json({
+                success: false,
+                message: "Too many incorrect OTP attempts. Please wait and try again.",
+            });
+        }
+
+        // General server error
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message,
+        });
+    }
+}
