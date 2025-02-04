@@ -11,8 +11,14 @@ import jwt from "jsonwebtoken";
 import * as assert from "node:assert";
 import {sendOtp} from "./otp.controller.js";
 import twilio from "twilio";
+import cloudinary from "cloudinary";
+import cookieParser from "cookie-parser";
+import multer from "multer"
+import {CloudinaryStorage} from "multer-storage-cloudinary";
+
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
 
 // checks the user when register with unique email
 export const checkUser = async(req,res) => {
@@ -93,12 +99,19 @@ export const emailPassCheck = async (req, res) => {
 
 
 
-export const register = async (req, res ) => {
+export const register =  async (req, res) => {
     const salt = await bcrypt.genSalt(12);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
     try {
+        console.log("Received File:", req.file);
+        console.log("Received Body:", req.body);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+        const fileUrl = req.file.path;
+
         const otpToken = req.cookies.otpToken;
+        // console.log(req.cookies);
         const data = req.body;
         data.password = hashedPassword;
         if (!otpToken) {
@@ -119,8 +132,10 @@ export const register = async (req, res ) => {
             })
         }
         req.body.contactPhone = phone;
+        req.body.sellerDocuments = fileUrl;
+
         const result = await registerMerchant(req.body);
-        console.log(result);
+        // console.log(result);
         res.status(201).json({
             message: 'Register Successful',
         })

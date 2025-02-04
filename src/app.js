@@ -12,12 +12,13 @@ import cloudinary from 'cloudinary';
 dotenv.config();
 const app = express();
 
-app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173", // Allow only your frontend
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+    origin: "http://localhost:5173", // Frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true // Allow cookies if needed
 }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
