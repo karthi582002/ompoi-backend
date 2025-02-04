@@ -7,6 +7,7 @@ import agent_registrationRoute from "./routes/routers.agent/agent_registration.r
 import otpRoute from "./routes/otp.route.js";
 import paymentRoute from "./routes/payment.route.js";
 import merchantRoute from "./routes/merchant.route.js";
+import cloudinary from 'cloudinary';
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,11 @@ app.use(cors({
     credentials: true // Allow cookies if needed
 }));
 app.use(cookieParser());
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 app.use("/register", registerRoute);
 app.use("/agent",agent_registrationRoute)
 app.use("/otp",otpRoute)
@@ -26,5 +32,6 @@ app.use("/merchant",merchantRoute)
 app.get("/", (req, res) => {
     res.send("Welcome to the Karthi!");
 })
+
 
 export default app;
