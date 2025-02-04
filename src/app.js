@@ -5,16 +5,24 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import agent_registrationRoute from "./routes/routers.agent/agent_registration.route.js";
 import otpRoute from "./routes/otp.route.js";
+import paymentRoute from "./routes/payment.route.js";
+import merchantRoute from "./routes/merchant.route.js";
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173", // Allow only your frontend
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+    credentials: true // Allow cookies if needed
+}));
 app.use(cookieParser());
 app.use("/register", registerRoute);
 app.use("/agent",agent_registrationRoute)
 app.use("/otp",otpRoute)
+app.use("/payment",paymentRoute)
+app.use("/merchant",merchantRoute)
 app.get("/", (req, res) => {
     res.send("Welcome to the Karthi!");
 })

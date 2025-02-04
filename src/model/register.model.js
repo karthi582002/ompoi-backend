@@ -15,6 +15,7 @@ export const registerMerchant = async (data) => {
         contactAltPhone: data.contactAltPhone,
         gstNumber: data.gstNumber,
         email: data.email,
+        location: data.location,
         address: data.address,
         password: data.password, // Consider hashing the password before storing
         sellerDocuments: data.sellerDocuments
@@ -25,6 +26,27 @@ export const registerMerchant = async (data) => {
 export const getUserByEmail = async (email) => {
     return db.select().from(merchant_registration).where(eq(merchant_registration.email, email));
 };
+
+export const getUserData = async (email) => {
+    return db
+        .select({
+            id: merchant_registration.id,
+            companyName: merchant_registration.companyName,
+            contactName: merchant_registration.contactName,
+            sellerCategory: merchant_registration.sellerCategory,
+            contactPhone: merchant_registration.contactPhone,
+            contactAltPhone: merchant_registration.contactAltPhone,
+            gstNumber: merchant_registration.gstNumber,
+            email: merchant_registration.email,
+            location: merchant_registration.location,
+            address: merchant_registration.address,
+            sellerDocuments: merchant_registration.sellerDocuments,
+            isVerified: merchant_registration.isVerified,
+            isPaid: merchant_registration.isPaid
+        })
+        .from(merchant_registration)
+        .where(eq(merchant_registration.email, email));
+}
 
 export const checkVerifiedStatus = async (email) => {
     return db.select({isVerified:merchant_registration.isVerified}).from(merchant_registration).where(eq(merchant_registration.email, email));
