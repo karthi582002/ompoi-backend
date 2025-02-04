@@ -2,7 +2,7 @@ import {
     changeMerchantPassword,
     checkVerifiedStatus,
     createUser,
-    getUserByEmail,
+    getUserByEmail, getUserData,
     registerMerchant
 } from "../model/register.model.js";
 // import generateToken from "../utils/generateToken..js";
@@ -73,9 +73,9 @@ export const emailPassCheck = async (req, res) => {
         
         try {
             const status = await checkVerifiedStatus(email);
-            const result = status[0]?.isVerified;
+            const result = await getUserData(email);
             
-            return res.status(200).json({ message: 'User verified', result });
+            return res.status(200).json({ message: 'User status', result });
         } catch (verificationError) {
             console.error("Error checking verification status:", verificationError);
             return res.status(500).json({
