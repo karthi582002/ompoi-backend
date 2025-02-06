@@ -10,6 +10,7 @@ export const protectedMerchantRoute =async (req, res,next) => {
             return res.status(401).json({error : "Unauthorized No Token Provided"});
         }
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
+
         if(!decoded){
             return res.status(401).json({error : "Unauthorized Invalid Token"});
         }
@@ -21,6 +22,9 @@ export const protectedMerchantRoute =async (req, res,next) => {
         req.merchant = merchant;
         next();
     }catch(err){
+        if(err.name === "TokenExpiredError"){
+            return res.status(401).json({ error: "Session expired. Please log in again." });
+        }
         console.log("Error in protectRouter:" + err );
         res.status(500).json({error : "Internal Server Error"});
     }
@@ -44,6 +48,9 @@ export const protectAgentRoute = async (req, res,next) => {
         req.agent = agent;
         next();
     }catch(err){
+        if(err.name === "TokenExpiredError"){
+            return res.status(401).json({ error: "Session expired. Please log in again." });
+        }
         console.log("Error in agent protectRouter:" + err );
         res.status(500).json({error : "Internal Server Error"});
     }
