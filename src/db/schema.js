@@ -56,3 +56,10 @@ export const approved_merchant = mysqlTable("approved_merchant", {
     createdAt: timestamp("created_at").defaultNow(),
 })
 
+export const master_admin = mysqlTable("master_admin", {
+    id: serial("id").autoincrement(),
+    adminEmail : varchar("adminEmail",{length : 255}).notNull(),
+    adminPassword : varchar("adminPassword",{length : 255}).notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+})
+

@@ -7,7 +7,7 @@ import {
 } from "../../model/agent.model/agentRegister.model.js";
 import {generateAgentToken} from "../../utils/generateToken..js";
 import {getUserByEmail} from "../../model/register.model.js";
-import {verified_merchant} from "../../db/schema.js";
+
 
 export const registerAgentController = async (req,res) => {
     try{
