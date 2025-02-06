@@ -51,7 +51,7 @@ export const verifyOtp = async (req, res) => {
 
         // Verify OTP with Twilio
         const result = await client.verify.v2
-            .services("VA035ad869bddea5c6b7532706ec95cefe")
+            .services(process.env.TWILIO_SERVICE_ID)
             .verificationChecks.create({
                 to: contactPhone,
                 code: otp,

@@ -12,8 +12,8 @@ export default defineConfig({
     // },
     dbCredentials: {
         host: "127.0.0.1",
-        user: "karthi",
-        database: "karthi_college",
-        password:'K.582002',
+        user: process.env.SQL_USERNAME,
+        database: process.env.SQL_DATABASE,
+        password: process.env.SQL_PASSWORD,
         port:'3306'
     }});
