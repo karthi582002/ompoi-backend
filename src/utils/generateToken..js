@@ -31,3 +31,19 @@ export const generateAgentToken = (agent_email,res) =>{
         throw new Error('Token generation failed'); // Pass the error to the main controller
     }
 }
+
+export const generateAdminToken = (admin_email,res) =>{
+    try{
+        console.log(admin_email)
+        const token = jwt.sign({admin_email:admin_email},process.env.JWT_ADMIN_SECRET,{expiresIn: '1hr'})
+        res.cookie('admin_jwt',token,{
+            maxAge: 60*60*60*1000,
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV !== 'development',
+        });
+    }catch(err){
+        console.error(`Error generating token: ${err.message}`);
+        throw new Error('Token generation failed'); // Pass the error to the main controller
+    }
+}
