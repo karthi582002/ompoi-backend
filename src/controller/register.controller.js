@@ -23,14 +23,15 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 // checks the user when register with unique email
 export const checkUser = async(req,res) => {
     try {
-        const {email} = req.body;
-        console.log(email);
-        if (!email) {
-            return res.status(400).json({
-                error: "Email is required",
+        const {email,contactPhone} = req.body;
+        console.log(req.body);
+        if (!contactPhone && !email) {
+            return res.status(404).json({
+                message: 'Either email or phone is required',
             })
         }
-        const user = await getUserByEmail(email);
+        const data = email ? email : contactPhone;
+        const user = await getUserData(data);
         console.log(user);
         if (user?.length === 0) {
             return res.status(200).json({
@@ -121,6 +122,11 @@ export const register =  async (req, res) => {
         try {
             const decoded = jwt.verify(otpToken, process.env.JWT_SECRET);
             phone = decoded.contactPhone;
+            if(req.body.contactPhone !== phone) {
+                return res.status(400).json({
+                    error: "Invalid phone number",
+                })
+            }
         } catch (err) {
             console.log(err)
             return res.status(401).json({ message: "Invalid or expired OTP token" });

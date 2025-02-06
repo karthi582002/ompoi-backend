@@ -1,6 +1,7 @@
 import { db } from "../config/db.js";
 import {merchant_registration, users} from "../db/schema.js";
 import { eq } from "drizzle-orm";
+import {or} from "drizzle-orm/sql/expressions/conditions";
 
 export const createUser = async (name, email) => {
     return db.insert(users).values({name, email});
@@ -27,7 +28,7 @@ export const getUserByEmail = async (email) => {
     return db.select().from(merchant_registration).where(eq(merchant_registration.email, email));
 };
 
-export const getUserData = async (email) => {
+export const getUserData = async (data) => {
     return db
         .select({
             id: merchant_registration.id,
@@ -45,7 +46,7 @@ export const getUserData = async (email) => {
             isPaid: merchant_registration.isPaid
         })
         .from(merchant_registration)
-        .where(eq(merchant_registration.email, email));
+        .where(or(eq(merchant_registration.email, data),eq(merchant_registration.contactPhone, data)));
 }
 
 export const checkVerifiedStatus = async (email) => {
