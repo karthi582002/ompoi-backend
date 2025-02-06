@@ -11,6 +11,11 @@ const router = express.Router();
 router.post("/registration", registerAgentController);
 router.post("/login", loginAgent);
 router.post("/verify-merchant",protectAgentRoute,aproveMerchantController)
-router.get("/",test_join)
+// router.get("/",test_join)
+router.get("/",protectAgentRoute,(req,res)=>{
+    res.status(200).json({
+        error : "Not Found"
+    })
+})
 export default
 router;

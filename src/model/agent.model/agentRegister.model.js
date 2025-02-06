@@ -29,3 +29,12 @@ export const selectData = async () =>{
         .innerJoin(agent_registration, eq(verified_merchant.agent_email, agent_registration.agent_email))
         .innerJoin(merchant_registration, eq(verified_merchant.merchant_email, merchant_registration.email));
 }
+
+export const getAgent = async (email) => {
+    return db.select({
+            agent_name: agent_registration.agent_name,
+            agent_email: agent_registration.agent_email,
+        }
+    ).from(agent_registration)
+        .where(eq(agent_registration.agent_email,email))
+}

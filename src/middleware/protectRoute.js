@@ -1,9 +1,11 @@
 import jwt from 'jsonwebtoken';
 import {getUserByEmail} from "../model/register.model.js";
+import {getMerchantDetails} from "../model/merchant.model.js";
+import {getAgent} from "../model/agent.model/agentRegister.model.js";
 
-export const protectRoute =async (req, res,next) => {
+export const protectedMerchantRoute =async (req, res,next) => {
     try {
-        const token = req.cookies.jwt;
+        const token = req.cookies.merchant_jwt;
         if(!token){
             return res.status(401).json({error : "Unauthorized No Token Provided"});
         }
@@ -11,11 +13,12 @@ export const protectRoute =async (req, res,next) => {
         if(!decoded){
             return res.status(401).json({error : "Unauthorized Invalid Token"});
         }
-        const user = getUserByEmail(decoded.merchentId);
-        if(!user){
-            return res.status(401).json({error : "User Not Found"});
+        const merchant = await getMerchantDetails(decoded.merchentId);
+        // console.log(merchant);
+        if(!merchant){
+            return res.status(401).json({error : "Merchant Not found Not Found"});
         }
-        req.user = user;
+        req.merchant = merchant;
         next();
     }catch(err){
         console.log("Error in protectRouter:" + err );
@@ -33,7 +36,8 @@ export const protectAgentRoute = async (req, res,next) => {
         if(!decoded){
             return res.status(401).json({error : "Unauthorized Invalid Token"});
         }
-        const agent = getUserByEmail(decoded.merchentId);
+        const agent = await getAgent(decoded.agent_email);
+        console.log(agent);
         if(!agent){
             return res.status(401).json({error : "User Not Found"});
         }

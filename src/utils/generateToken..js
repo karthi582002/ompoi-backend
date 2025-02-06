@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken'
 
 
-export const generateToken = (merchentId,res) =>{
+export const generateMerchantToken = (merchentId,res) =>{
     try{
+        console.log(merchentId);
         const token = jwt.sign({merchentId:merchentId,},process.env.JWT_SECRET,{expiresIn: '1hr'})
-        res.cookie('jwt',token,{
+        res.cookie('merchant_jwt',token,{
             maxAge: 60*60*60*1000,
             httpOnly: true,
             sameSite: 'strict',
@@ -30,5 +31,3 @@ export const generateAgentToken = (agent_email,res) =>{
         throw new Error('Token generation failed'); // Pass the error to the main controller
     }
 }
-
-
