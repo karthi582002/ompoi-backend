@@ -39,6 +39,7 @@ export const sendOtp = async (req, res) => {
 export const verifyOtp = async (req, res) => {
     try {
         const { contactPhone, otp } = req.body;
+        console.log(contactPhone, otp);
 
         //Validate input
         if (!contactPhone || !otp) {
@@ -50,7 +51,7 @@ export const verifyOtp = async (req, res) => {
 
         // Verify OTP with Twilio
         const result = await client.verify.v2
-            .services("VA035ad869bddea5c6b7532706ec95cefe")
+            .services(process.env.TWILIO_SERVICE_ID)
             .verificationChecks.create({
                 to: contactPhone,
                 code: otp,
@@ -60,12 +61,12 @@ export const verifyOtp = async (req, res) => {
 
         // OTP Verified Successfully
         if (result.status === "approved") {
-            const otpToken = jwt.sign({ contactPhone }, process.env.JWT_SECRET, { expiresIn: "5m" });
+            const otpToken = jwt.sign({ contactPhone }, process.env.JWT_SECRET, { expiresIn: "1hr" });
             res.cookie("otpToken", otpToken, {
                 httpOnly: true,  // Prevent frontend JavaScript access
-                secure: process.env.NODE_ENV === "production", // Only send over HTTPS in production
-                sameSite: "Strict", // Prevent CSRF attacks
-                maxAge: 5 * 60 * 1000, // 5 minutes
+                secure: false, // Only send over HTTPS in production
+                sameSite: "lax", // Prevent CSRF attacks
+                maxAge: 60*60*60*1000,
             });
             return res.status(200).json({ success: true, message: "OTP verified successfully" });
         }

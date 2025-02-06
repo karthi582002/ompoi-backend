@@ -71,14 +71,15 @@ export const aproveMerchantController = async (req,res) => {
    try{
        const {merchant_email,agent_email} = req.body;
        const data = req.body;
-       const user = await getUserByEmail(agent_email);
-       const agent = await getAgentByEmail(merchant_email);
+       const user = await getUserByEmail(merchant_email);
+       const agent = await getAgentByEmail(agent_email);
        // console.log(user);
        // const agent_name = agent[0].agent_name;
        // const user_email = user[0].email;
-       if(user.length !== 0 || agent.length !== 0){
+       if(user.length === 0 || agent.length === 0){
+           // console.log(agent)
            return res.status(401).json({
-               message: 'Unauthorized',
+               message: 'no user or agent',
            })
        }
        await insertVerifiedMerchant(data);
