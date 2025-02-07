@@ -1,5 +1,5 @@
 import express from "express";
-import {register, checkUser, emailPassCheck} from "../controller/register.controller.js";
+import {register, checkUser, emailPassCheck, checkAgentDetails} from "../controller/register.controller.js";
 import {upload} from "../middleware/Cloudinary_Upload.js";
 
 const router = express.Router();
