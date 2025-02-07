@@ -35,6 +35,7 @@ export const getAgent = async (email) => {
     return db.select({
             agent_name: agent_registration.agent_name,
             agent_email: agent_registration.agent_email,
+            agent_phone:agent_registration.agent_number
         }
     ).from(agent_registration)
         .where(eq(agent_registration.agent_email,email))
