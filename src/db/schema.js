@@ -56,10 +56,10 @@ export const approved_merchant = mysqlTable("approved_merchant", {
     createdAt: timestamp("created_at").defaultNow(),
 })
 
-export const product_skus=mysqlTable("product_skus", {
+export const product_skus = mysqlTable("product_skus", {
     id: serial("id").primaryKey().autoincrement(),
     merchantId: varchar("merchant_id", {length:8}).notNull().references(()=>approved_merchant.merchantId,{onDelete:"cascade"}),
-    sku: varchar("sku", { length: 50 }).primaryKey(),
+    productId: varchar("productId", { length: 50 }).primaryKey(),
     grade: varchar("grade", {length:50}).notNull(),
     subGrade: varchar("sub_grade",{length:50}),
     origin: varchar("origin",{length:50}).notNull(),
@@ -75,9 +75,8 @@ export const product_skus=mysqlTable("product_skus", {
 
 export const sku_resources = mysqlTable("sku_resources", {
     id: serial("id").primaryKey().autoincrement(),
-    merchantId: varchar("merchant_id", { length: 8 }).notNull().references(() => merchant_registration.merchantId, { onDelete: "cascade" }),
-    sku: varchar("sku", { length: 50 }).notNull().references(() => product_skus.sku, { onDelete: "cascade" }),
-    productId: integer("product_id").notNull().references(() => product_skus.id, { onDelete: "cascade" }),
+    merchantId: varchar("merchant_id", { length: 8 }).notNull().references(() => approved_merchant.merchantId, { onDelete: "cascade" }),
+    productId: varchar("productId", { length: 50 }).notNull().references(() => product_skus.productId, { onDelete: "cascade" }),
     photoUrl: varchar("photo_url",{length: 255}),
     createdAt: timestamp("created_at").defaultNow(),
 });
