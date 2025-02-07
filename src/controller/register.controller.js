@@ -27,6 +27,7 @@ export const checkUser = async(req,res) => {
         const data = email ? email : contactPhone;
         const user = await getUserData(data);
         console.log(user);
+        console.log(user);
         if (user?.length === 0) {
             return res.status(200).json({
                 success: true,
