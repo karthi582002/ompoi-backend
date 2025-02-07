@@ -92,8 +92,6 @@ export const emailPassCheck = async (req, res) => {
     }
 };
 
-
-
 export const register =  async (req, res) => {
     const salt = await bcrypt.genSalt(12);
     try {
