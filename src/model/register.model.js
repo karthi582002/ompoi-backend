@@ -27,21 +27,22 @@ export const getUserByEmail = async (email) => {
 
 export const getUserData = async (data) => {
     return db
-        .select({
-            id: merchant_registration.id,
-            companyName: merchant_registration.companyName,
-            contactName: merchant_registration.contactName,
-            sellerCategory: merchant_registration.sellerCategory,
-            contactPhone: merchant_registration.contactPhone,
-            contactAltPhone: merchant_registration.contactAltPhone,
-            gstNumber: merchant_registration.gstNumber,
-            email: merchant_registration.email,
-            location: merchant_registration.location,
-            address: merchant_registration.address,
-            sellerDocuments: merchant_registration.sellerDocuments,
-            isVerified: merchant_registration.isVerified,
-            isPaid: merchant_registration.isPaid
-        })
+        .select(
+            {
+                companyName: merchant_registration.companyName,
+                contactName: merchant_registration.contactName,
+                sellerCategory: merchant_registration.sellerCategory,
+                contactPhone: merchant_registration.contactPhone,
+                contactAltPhone: merchant_registration.contactAltPhone,
+                gstNumber: merchant_registration.gstNumber,
+                email: merchant_registration.email,
+                location: merchant_registration.location,
+                address: merchant_registration.address,
+                sellerDocuments: merchant_registration.sellerDocuments,
+                isVerified: merchant_registration.isVerified,
+                isPaid: merchant_registration.isPaid
+            }
+        )
         .from(merchant_registration)
         .where(or(eq(merchant_registration.email, data),eq(merchant_registration.contactPhone, data)));
 }
