@@ -145,4 +145,39 @@ export const register =  async (req, res) => {
     }
 };
 
-
+export const checkAgentDetails = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+        if (!email || !password) {
+            return res.status(400).json({
+                error: "Email and password is required",
+            });
+        }
+        const user = await getUserByEmail(email);
+        if (!user || user.length === 0) {
+            return res.status(404).json({
+                error: "User Not Found",
+            });
+        }
+        const isPasswordValid = await bcrypt.compare(password, user[0].password || "");
+        if (!isPasswordValid) {
+            return res.status(400).json({
+                error: "Password is Incorrect",
+            });
+        }
+        try {
+            // const status = await checkVerifiedStatus(email);
+            const result = await getAgentDetails(email);
+            // console.log(result[0]?.agentEmail);
+            const agent = await getAgent(result[0]?.agentEmail)
+            return res.status(200).json({agent});
+        } catch (err) {
+            console.error("Error in getting agent data", err);
+            return res.status(500).json({
+                error: "Internal Server Error while verifying status",
+            });
+        }
+    }catch(error) {
+        console.error("Error in checking agent controller :", error);
+    }
+}
