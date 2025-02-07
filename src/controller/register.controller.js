@@ -1,19 +1,14 @@
 import {
     checkVerifiedStatus,
-    createUser,
     getUserByEmail, getUserData,
     registerMerchant
 } from "../model/register.model.js";
 // import generateToken from "../utils/generateToken..js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import * as assert from "node:assert";
 import {sendOtp} from "./otp.controller.js";
 import twilio from "twilio";
-import cloudinary from "cloudinary";
-import cookieParser from "cookie-parser";
-import multer from "multer"
-import {CloudinaryStorage} from "multer-storage-cloudinary";
+
 
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);

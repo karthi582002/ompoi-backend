@@ -2,6 +2,7 @@ import {db} from "../config/db.js";
 import {approved_merchant, merchant_registration} from "../db/schema.js";
 import {eq} from "drizzle-orm";
 import app from "../app.js";
+import {or} from "drizzle-orm/sql/expressions/conditions";
 
 export const getMerchantID = async (email) => {
     return db.select({merchantId:approved_merchant.merchantId})
@@ -9,10 +10,15 @@ export const getMerchantID = async (email) => {
         .where(eq(approved_merchant.merchantEmail,email));
 }
 
-export const getMerchantDetails = async (merchantId) => {
+export const getMerchantDetails = async (data) => {
     return db.select()
         .from(approved_merchant)
-        .where(eq(approved_merchant.merchantId,merchantId));
+        .where(
+            or(
+                eq(approved_merchant.merchantId,data),
+                eq(approved_merchant.merchantEmail,data)
+            )
+        );
 }
 
 export const changeMerchantPassword = async (email,newPassword) => {
@@ -47,7 +53,6 @@ export const merchantProfile = async (email) => {
             console.log("No merchant found for this email:", email);
             return null;
         }
-
         return data;
     } catch (error) {
         console.error("Error fetching merchant profile:", error);

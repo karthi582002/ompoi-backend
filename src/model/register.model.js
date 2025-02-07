@@ -1,11 +1,8 @@
 import { db } from "../config/db.js";
-import {merchant_registration, users} from "../db/schema.js";
+import {merchant_registration} from "../db/schema.js";
 import { eq } from "drizzle-orm";
 import {or} from "drizzle-orm/sql/expressions/conditions";
 
-export const createUser = async (name, email) => {
-    return db.insert(users).values({name, email});
-};
 
 export const registerMerchant = async (data) => {
     return db.insert(merchant_registration).values({

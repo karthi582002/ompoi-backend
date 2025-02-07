@@ -1,10 +1,11 @@
 import express from 'express';
-import {loginAdmin, registerAdmin} from "../../controller/admin.controller/admin.controller.js";
+import {assignSellerToAgent, loginAdmin, registerAdmin} from "../../controller/admin.controller/admin.controller.js";
 import {protectAdminRoute} from "../../middleware/protectRoute.js";
 const router = express.Router()
 
 router.post("/register",registerAdmin);
 router.post("/login",loginAdmin)
+router.post("/assign-agent-seller",protectAdminRoute,assignSellerToAgent)
 // test
 router.get("/",protectAdminRoute,(req,res)=> {
     const adminEmail = req.adminEmail;

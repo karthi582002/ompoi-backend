@@ -40,7 +40,7 @@ export const protectAgentRoute = async (req, res,next) => {
             return res.status(401).json({error : "Unauthorized Invalid Token"});
         }
         const agent = await getAgent(decoded.agent_email);
-        console.log(agent);
+        // console.log(agent);
         if(!agent){
             return res.status(401).json({error : "User Not Found"});
         }

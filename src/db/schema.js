@@ -1,14 +1,7 @@
-import { mysqlTable, serial, varchar } from "drizzle-orm/mysql-core";
-import {boolean, decimal, integer, timestamp} from "drizzle-orm/pg-core";
+import { mysqlTable, serial, varchar,boolean,decimal,int,timestamp } from "drizzle-orm/mysql-core";
 
-export const users = mysqlTable("data", {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 255 }),
-    email: varchar("email", { length: 255 }).unique(),
-});
 
 export const merchant_registration = mysqlTable("merchant_registration", {
-    id: serial("id").autoincrement(),
     companyName: varchar("companyName",{length : 50}).notNull(),
     contactName: varchar("contactName",{length : 50}).notNull(),
     sellerCategory: varchar("sellerCategory",{length : 30}).notNull(),
@@ -19,13 +12,13 @@ export const merchant_registration = mysqlTable("merchant_registration", {
     location:varchar("location",{length : 50}).notNull().default("TamilNadu"),
     address: varchar("address",{length : 255}).notNull(),
     password: varchar("password",{length : 255}).notNull(),
-    sellerDocuments: varchar("sellerDocument",{length : 255}).notNull(),
+    sellerDocuments: varchar("sellerDocuments",{length : 255}).notNull(),
     isVerified: boolean("isVerified").default(false),
     isPaid: boolean("isPaid").default(false),
 });
 
 export const agent_registration = mysqlTable("agent_registration", {
-    id: serial("id").autoincrement(),
+    id: serial("id"),
     agent_name : varchar("agent_name",{length : 50}).notNull(),
     agent_number : varchar("agent_number",{length : 12}).notNull().unique(),
     agent_email : varchar("agent_email",{length : 255}).notNull().primaryKey().notNull(),
@@ -34,17 +27,17 @@ export const agent_registration = mysqlTable("agent_registration", {
 })
 
 export const verified_merchant = mysqlTable("verified_merchant", {
-    id: serial("id").autoincrement(),
+    id: serial("id"),
     agent_email : varchar("agent_email",{length : 255}).notNull().references(()=> agent_registration.agent_email,{onDelete : "cascade"}),
     merchant_email : varchar("merchant_email",{length : 255}).notNull().references(()=> merchant_registration.email,{onDelete : "cascade"}),
 })
 
 export const registration_payment = mysqlTable("registration_payment",{
-    id: serial("id").primaryKey().autoincrement(),
+    id: serial("id").primaryKey(),
     orderId: varchar("order_id", {length: 255}).notNull(),
     paymentId: varchar("payment_id",{length: 255}).notNull(),
     email: varchar("email",{length: 255}).notNull().references(()=> merchant_registration.email,{onDelete : "cascade"}),
-    amount: decimal("amount").notNull(),
+    amount: decimal("amount",{precision:10,scale:2}).notNull(),
     status: varchar("status",{length: 255}).default("PENDING"),
     createdAt: timestamp("created_at").defaultNow(),
 })
@@ -57,7 +50,7 @@ export const approved_merchant = mysqlTable("approved_merchant", {
 })
 
 export const product_skus = mysqlTable("product_skus", {
-    id: serial("id").primaryKey().autoincrement(),
+    id: serial("id"),
     merchantId: varchar("merchant_id", {length:8}).notNull().references(()=>approved_merchant.merchantId,{onDelete:"cascade"}),
     productId: varchar("productId", { length: 50 }).primaryKey(),
     grade: varchar("grade", {length:50}).notNull(),
@@ -66,15 +59,15 @@ export const product_skus = mysqlTable("product_skus", {
     quality: varchar("quality",{length:20}).notNull(),
     color: varchar("color",{length:50}),
     packing: varchar("packing",{length:100}).notNull(),
-    quantity: integer("quantity").notNull(),
-    unitPrice: decimal("unit_price").notNull(),
+    quantity: int("quantity").notNull(),
+    unitPrice: decimal("unit_price", { precision: 10, scale: 2 }).notNull(),
     moisture: boolean("moisture").default(false),
     createdAt: timestamp("created_at").defaultNow(),
 });
 
 
 export const sku_resources = mysqlTable("sku_resources", {
-    id: serial("id").primaryKey().autoincrement(),
+    id: serial("id").primaryKey(),
     merchantId: varchar("merchant_id", { length: 8 }).notNull().references(() => approved_merchant.merchantId, { onDelete: "cascade" }),
     productId: varchar("productId", { length: 50 }).notNull().references(() => product_skus.productId, { onDelete: "cascade" }),
     photoUrl: varchar("photo_url",{length: 255}),
@@ -82,8 +75,17 @@ export const sku_resources = mysqlTable("sku_resources", {
 });
 
 export const master_admin = mysqlTable("master_admin", {
-    id: serial("id").autoincrement(),
+    id: serial("id"),
     adminEmail : varchar("adminEmail",{length : 255}).notNull(),
     adminPassword : varchar("adminPassword",{length : 255}).notNull(),
     createdAt: timestamp("created_at").defaultNow(),
 });
+
+export const agent_tasks = mysqlTable("agent_tasks", {
+    id: serial("id"),
+    merchantName: varchar("merchantName",{length : 255}).notNull(),
+    merchantEmail : varchar("merchantEmail",{length : 255}).notNull().references(()=> merchant_registration.email,{onDelete: "cascade"}),
+    agentName: varchar("agentName",{length : 255}).notNull(),
+    agentEmail : varchar("agentEmail",{length : 255}).notNull().references(()=> agent_registration.agent_email,{onDelete: "cascade"}),
+    createdAt: timestamp("createdAt").defaultNow(),
+})
