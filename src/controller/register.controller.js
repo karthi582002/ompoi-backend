@@ -1,5 +1,4 @@
 import {
-    changeMerchantPassword,
     checkVerifiedStatus,
     createUser,
     getUserByEmail, getUserData,
@@ -23,14 +22,15 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 // checks the user when register with unique email
 export const checkUser = async(req,res) => {
     try {
-        const {email} = req.body;
-        console.log(email);
-        if (!email) {
-            return res.status(400).json({
-                error: "Email is required",
+        const {email,contactPhone} = req.body;
+        console.log(req.body);
+        if (!contactPhone && !email) {
+            return res.status(404).json({
+                message: 'Either email or phone is required',
             })
         }
-        const user = await getUserByEmail(email);
+        const data = email ? email : contactPhone;
+        const user = await getUserData(data);
         console.log(user);
         if (user?.length === 0) {
             return res.status(200).json({
@@ -121,6 +121,11 @@ export const register =  async (req, res) => {
         try {
             const decoded = jwt.verify(otpToken, process.env.JWT_SECRET);
             phone = decoded.contactPhone;
+            if(req.body.contactPhone !== phone) {
+                return res.status(400).json({
+                    error: "Invalid phone number",
+                })
+            }
         } catch (err) {
             console.log(err)
             return res.status(401).json({ message: "Invalid or expired OTP token" });
@@ -145,65 +150,4 @@ export const register =  async (req, res) => {
     }
 };
 
-export const forgetPassword = async (req, res) => {
-    try{
-        const {email,newPassword,otp} = req.body;
-        if (!email || !newPassword || !otp) {
-            return res.status(400).json({
-                error: "Enter all the Fields",
-            })
-        }
-        const user = await getUserByEmail(email);
-        if (user.lenght === 0) {
-            return res.status(401).json({
-                error: "User Not Found",
-            })
-        }
-        const phoneNumber = user[0].contactPhone;
-        console.log(phoneNumber);
 
-        const result = await client.verify.v2
-            .services("VA035ad869bddea5c6b7532706ec95cefe")
-            .verificationChecks.create({
-                to: phoneNumber,
-                code: otp,
-            });
-        if (result.status === "approved") {
-            const salt = await bcrypt.genSalt(12);
-            const hashedPassword = await bcrypt.hash(newPassword, salt);
-            await changeMerchantPassword(email, hashedPassword);
-            return res.status(200).json({
-                message: 'Password Changed Successfull',
-            })
-        }
-        return res.status(400).json({
-            success: false,
-            message: "Invalid OTP. Please try again.",
-        });
-    } catch (error) {
-        console.error("Error in OTP verification:", error);
-        // Handle Twilio-specific errors
-        if (error.code === 20404) {
-            return res.status(404).json({
-                success: false,
-                message: "Verification service not found. Check the Service SID.",
-                moreInfo: error.moreInfo,
-            });
-        }
-
-        // Handle Rate Limit Exceeded
-        if (error.code === 60203) {
-            return res.status(429).json({
-                success: false,
-                message: "Too many incorrect OTP attempts. Please wait and try again.",
-            });
-        }
-
-        // General server error
-        return res.status(500).json({
-            success: false,
-            message: "Internal server error",
-            error: error.message,
-        });
-    }
-}

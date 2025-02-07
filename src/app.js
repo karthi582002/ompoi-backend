@@ -8,6 +8,7 @@ import otpRoute from "./routes/otp.route.js";
 import paymentRoute from "./routes/payment.route.js";
 import merchantRoute from "./routes/merchant.route.js";
 import cloudinary from 'cloudinary';
+import adminRoute from "./routes/admin.routes/admin.route.js";
 
 dotenv.config();
 const app = express();
@@ -25,14 +26,17 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 })
+// routes
 app.use("/register", registerRoute);
 app.use("/agent",agent_registrationRoute)
 app.use("/otp",otpRoute)
 app.use("/payment",paymentRoute)
 app.use("/merchant",merchantRoute)
+app.use("/admin",adminRoute)
+
+
+
 app.get("/", (req, res) => {
     res.send("Welcome to the Karthi!");
 })
-
-
 export default app;
