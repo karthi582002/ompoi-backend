@@ -74,10 +74,17 @@ export const product_skus=mysqlTable("product_skus", {
 
 
 export const sku_resources = mysqlTable("sku_resources", {
-    id: integer("id").primaryKey().autoincrement(),
+    id: serial("id").primaryKey().autoincrement(),
     merchantId: varchar("merchant_id", { length: 8 }).notNull().references(() => merchant_registration.merchantId, { onDelete: "cascade" }),
     sku: varchar("sku", { length: 50 }).notNull().references(() => product_skus.sku, { onDelete: "cascade" }),
     productId: integer("product_id").notNull().references(() => product_skus.id, { onDelete: "cascade" }),
     photoUrl: varchar("photo_url",{length: 255}),
+    createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const master_admin = mysqlTable("master_admin", {
+    id: serial("id").autoincrement(),
+    adminEmail : varchar("adminEmail",{length : 255}).notNull(),
+    adminPassword : varchar("adminPassword",{length : 255}).notNull(),
     createdAt: timestamp("created_at").defaultNow(),
 });
