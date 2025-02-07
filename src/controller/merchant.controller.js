@@ -93,7 +93,6 @@ export const forgetPassword = async (req, res) => {
     }
 }
 
-
 // merchant Login Phase
 export const merchantLogin = async (req,res) => {
     try{
@@ -145,3 +144,20 @@ export const aboutMe = async (req, res) => {
     }
 }
 
+export const addProducts = async (req, res) => {
+    try{
+        const data = req.merchant;
+        const {email,password} = req.body;
+        console.log(email)
+        console.log(password)
+
+        res.status(200).json({
+            email,password
+        })
+    }catch (err){
+        console.error("Error in add Products in merchant controller:", err)
+        res.status(500).json({
+            error: "Internal Server Error",
+        })
+    }
+}
