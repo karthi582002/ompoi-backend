@@ -1,5 +1,5 @@
 import {
-    checkVerifiedStatus,
+    checkVerifiedStatus, getAgentDetails,
     getUserByEmail, getUserData,
     registerMerchant
 } from "../model/register.model.js";
@@ -8,6 +8,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {sendOtp} from "./otp.controller.js";
 import twilio from "twilio";
+import {getAgent} from "../model/agent.model/agentRegister.model.js";
 
 
 
@@ -52,29 +53,22 @@ export const emailPassCheck = async (req, res) => {
                 error: "Email and password is required",
             });
         }
-        
         const user = await getUserByEmail(email);
-        
         if (!user || user.length === 0) {
             return res.status(404).json({
                 error: "User Not Found",
             });
         }
-        
-        console.log(user[0].password);
-        
         const isPasswordValid = await bcrypt.compare(password, user[0].password || "");
-        
         if (!isPasswordValid) {
             return res.status(400).json({
                 error: "Password is Incorrect",
             });
         }
-        
         try {
-            const status = await checkVerifiedStatus(email);
+            // const status = await checkVerifiedStatus(email);
             const result = await getUserData(email);
-            
+            console.log(result);
             return res.status(200).json({ message: 'User status', result });
         } catch (verificationError) {
             console.error("Error checking verification status:", verificationError);
@@ -82,7 +76,6 @@ export const emailPassCheck = async (req, res) => {
                 error: "Internal Server Error while verifying status",
             });
         }
-        
     } catch (error) {
         console.error("Error in emailPassCheck:", error);
         return res.status(500).json({
