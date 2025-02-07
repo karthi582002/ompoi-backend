@@ -18,7 +18,6 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 export const checkUser = async(req,res) => {
     try {
         const {email,contactPhone} = req.body;
-        console.log(req.body);
         if (!contactPhone && !email) {
             return res.status(404).json({
                 message: 'Either email or phone is required',
