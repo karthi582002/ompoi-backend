@@ -1,5 +1,5 @@
 import { db } from "../config/db.js";
-import {merchant_registration} from "../db/schema.js";
+import {agent_tasks, merchant_registration} from "../db/schema.js";
 import { eq } from "drizzle-orm";
 import {or} from "drizzle-orm/sql/expressions/conditions";
 
