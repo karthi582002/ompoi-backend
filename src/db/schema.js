@@ -56,3 +56,4 @@ export const approved_merchant = mysqlTable("approved_merchant", {
     createdAt: timestamp("created_at").defaultNow(),
 })
 
+
