@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "3001:3000"
+    depends_on:
+      - database
+    env_file:
+      - .env  # This automatically loads all the environment variables from .env file
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+        - DB_HOST=database
+        - DB_USER=${SQL_USERNAME}
+        - DB_PASSWORD=${SQL_PASSWORD}
+        - DB_NAME=${SQL_DATABASE}
+        - JWT_SECRET=${JWT_SECRET}
+        - JWT_AGENT_SECRET=${JWT_AGENT_SECRET}
+        - JWT_MERCHANT_SECRET=${JWT_MERCHANT_SECRET}
+        - JWT_ADMIN_SECRET=${JWT_ADMIN_SECRET}
+        - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+        - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+        - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER}
+        - TWILIO_SERVICE_ID=${TWILIO_SERVICE_ID}
+        - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+        - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+        - NODE_ENV=${NODE_ENV}
+        - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+        - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+        - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+
+  database:
+    image: mysql:8
+    environment:
+      DATABASE_URL: mysql://root:K.582002@backend-database-1:3306/karthi_college
+      DB_HOST: backend-database-1
+      DB_USER: root
+      DB_PASSWORD: K.582002
+      DB_NAME: karthi_college
+      command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
