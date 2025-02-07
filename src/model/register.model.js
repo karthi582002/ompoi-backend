@@ -49,3 +49,9 @@ export const getUserData = async (data) => {
 export const checkVerifiedStatus = async (email) => {
     return db.select({isVerified:merchant_registration.isVerified}).from(merchant_registration).where(eq(merchant_registration.email, email));
 }
+
+export const getAgentDetails = async (email) => {
+    return db.select({agentEmail:agent_tasks.agentEmail}).from(agent_tasks)
+        .where(eq(agent_tasks.merchantEmail, email));
+}
+
