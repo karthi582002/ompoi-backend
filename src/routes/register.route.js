@@ -6,5 +6,7 @@ const router = express.Router();
 router.post("/", upload.single("file"), register);
 router.post("/checkuser", checkUser);
 router.post("/status", emailPassCheck);
+router.get("/agent-details",checkAgentDetails)
+router.post("/check-agent",checkAgentDetails)
 
 export default router;
