@@ -109,10 +109,10 @@ export const merchantLogin = async (req,res) => {
             })
         }
         const isPasswordVerified = await bcrypt.compare(password,merchant[0]?.password || " ");
-        console.log(merchant)
+        // console.log(merchant)
         if(!isPasswordVerified){
             return res.status(401).json({
-                error: 'Invalid MerchantId or Password',
+                error: 'Invalid Password',
             })
         }
         generateMerchantToken(merchant[0]?.merchantId, res)
