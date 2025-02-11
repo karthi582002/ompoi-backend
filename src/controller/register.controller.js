@@ -1,19 +1,15 @@
 import {
-    checkVerifiedStatus,
-    createUser,
+    checkVerifiedStatus, getAgentDetails,
     getUserByEmail, getUserData,
     registerMerchant
 } from "../model/register.model.js";
 // import generateToken from "../utils/generateToken..js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import * as assert from "node:assert";
 import {sendOtp} from "./otp.controller.js";
 import twilio from "twilio";
-import cloudinary from "cloudinary";
-import cookieParser from "cookie-parser";
-import multer from "multer"
-import {CloudinaryStorage} from "multer-storage-cloudinary";
+import {getAgent} from "../model/agent.model/agentRegister.model.js";
+
 
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
@@ -23,7 +19,6 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 export const checkUser = async(req,res) => {
     try {
         const {email,contactPhone} = req.body;
-        console.log(req.body);
         if (!contactPhone && !email) {
             return res.status(404).json({
                 message: 'Either email or phone is required',
@@ -31,6 +26,7 @@ export const checkUser = async(req,res) => {
         }
         const data = email ? email : contactPhone;
         const user = await getUserData(data);
+        console.log(user);
         console.log(user);
         if (user?.length === 0) {
             return res.status(200).json({
@@ -52,35 +48,27 @@ export const checkUser = async(req,res) => {
 export const emailPassCheck = async (req, res) => {
     try {
         const { email, password } = req.body;
-        
         if (!email || !password) {
             return res.status(400).json({
                 error: "Email and password is required",
             });
         }
-        
         const user = await getUserByEmail(email);
-        
         if (!user || user.length === 0) {
             return res.status(404).json({
                 error: "User Not Found",
             });
         }
-        
-        console.log(user[0].password);
-        
         const isPasswordValid = await bcrypt.compare(password, user[0].password || "");
-        
         if (!isPasswordValid) {
             return res.status(400).json({
                 error: "Password is Incorrect",
             });
         }
-        
         try {
-            const status = await checkVerifiedStatus(email);
+            // const status = await checkVerifiedStatus(email);
             const result = await getUserData(email);
-            
+            console.log(result);
             return res.status(200).json({ message: 'User status', result });
         } catch (verificationError) {
             console.error("Error checking verification status:", verificationError);
@@ -88,7 +76,6 @@ export const emailPassCheck = async (req, res) => {
                 error: "Internal Server Error while verifying status",
             });
         }
-        
     } catch (error) {
         console.error("Error in emailPassCheck:", error);
         return res.status(500).json({
@@ -96,8 +83,6 @@ export const emailPassCheck = async (req, res) => {
         });
     }
 };
-
-
 
 export const register =  async (req, res) => {
     const salt = await bcrypt.genSalt(12);
@@ -150,4 +135,87 @@ export const register =  async (req, res) => {
     }
 };
 
+export const checkAgentDetails = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+        if (!email || !password) {
+            return res.status(400).json({
+                error: "Email and password is required",
+            });
+        }
+        const user = await getUserByEmail(email);
+        if (!user || user.length === 0) {
+            return res.status(404).json({
+                error: "User Not Found",
+            });
+        }
+        const isPasswordValid = await bcrypt.compare(password, user[0].password || "");
+        if (!isPasswordValid) {
+            return res.status(400).json({
+                error: "Password is Incorrect",
+            });
+        }
+        try {
+            // const status = await checkVerifiedStatus(email);
+            const result = await getAgentDetails(email);
+            // console.log(result[0]?.agentEmail);
+            const agent = await getAgent(result[0]?.agentEmail)
+            return res.status(200).json({agent});
+        } catch (err) {
+            console.error("Error in getting agent data", err);
+            return res.status(500).json({
+                error: "Internal Server Error while verifying status",
+            });
+        }
+    }catch(error) {
+        console.error("Error in checking agent controller :", error);
+    }
+}
 
+export const checkGSTNumber = async (req, res) => {
+
+
+    /*
+            For testing Puropse these are some GSTIN Numbers
+            |-----------------|--------|
+            |      Number     |   0/1  |
+            |-----------------|--------|
+            | 27AIFPH3584H1Z5 |    0   |
+            |-----------------|--------|
+            | 35AAACC1206D1ZJ |    1   |
+            |-----------------|--------|
+
+     */
+    try{
+        const {gstNumber} = req.body
+        console.log(gstNumber)
+        const regex = /^\d{2}[A-Z]{5}\d{4}[A-Z]\d[Z]\w$/;
+        const isGstNumber = regex.test(gstNumber) ? gstNumber : false;
+        if (!isGstNumber) {
+            return res.status(400).json({
+                error: "Invalid Gst Number",
+            })
+        }
+        const data = await fetch(`https://razorpay.com/api/gstin/${isGstNumber}`).then(res => res.json());
+        // console.log(data.online_provider)
+        console.log(data.enrichment_details.online_provider.details);
+        const result = {
+            legal_name : data.enrichment_details.online_provider.details.legal_name.value,
+            status : data.enrichment_details.online_provider.details.status.value
+        }
+        if(result.status === "Cancelled"){
+            return res.status(401).json({
+                error: "Your GST Have Been cancelled So you can't Register..."
+            })
+        }
+        return res.status(200).json({
+            result
+        })
+    }catch(error) {
+        console.error("Error in checking gstNumber controller :", error);
+        return res.status(500).json({
+            error: "Internal Server Error while verifying status",
+        })
+    }
+
+}

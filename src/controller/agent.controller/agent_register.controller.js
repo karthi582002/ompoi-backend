@@ -1,12 +1,13 @@
 import bcrypt from "bcrypt";
 import {
-    approveMerchant,
+    approveMerchant, checkValidVerify,
     getAgentByEmail,
     insertVerifiedMerchant,
     registerAgent, selectData
 } from "../../model/agent.model/agentRegister.model.js";
 import {generateAgentToken} from "../../utils/generateToken..js";
 import {getUserByEmail} from "../../model/register.model.js";
+import {checkMerchantInTaskTable} from "../../model/admin.model/admin.model.js";
 
 
 export const registerAgentController = async (req,res) => {
@@ -69,21 +70,26 @@ export const loginAgent = async (req,res) => {
 
 export const aproveMerchantController = async (req,res) => {
    try{
-       const {merchant_email,agent_email} = req.body;
+       const {merchant_email} = req.body;
+       const agent_email = req.agent[0].agent_email
        const data = req.body;
        const user = await getUserByEmail(merchant_email);
        const agent = await getAgentByEmail(agent_email);
-       // console.log(user);
-       // const agent_name = agent[0].agent_name;
-       // const user_email = user[0].email;
+       const checkMerchantTask = await checkValidVerify(merchant_email,agent_email);
        if(user.length === 0 || agent.length === 0){
            // console.log(agent)
            return res.status(401).json({
-               message: 'no user or agent',
+               message: 'Invalid Merchant',
            })
        }
-       await insertVerifiedMerchant(data);
-       await approveMerchant(agent_email,merchant_email);
+       if(checkMerchantTask.length === 0){
+           return res.status(400).json({
+               error:"Your Not assigned To this seller."
+           })
+       }
+       console.log(agent_email,merchant_email)
+       await insertVerifiedMerchant(agent_email, merchant_email);
+       await approveMerchant(agent_email, merchant_email);
        res.status(200).json({
            message: 'Merchant Approved Successfully',
        })

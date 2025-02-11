@@ -1,6 +1,7 @@
-import {agent_registration, merchant_registration, verified_merchant} from "../../db/schema.js";
+import {agent_registration, agent_tasks, merchant_registration, verified_merchant} from "../../db/schema.js";
 import {eq} from "drizzle-orm";
 import {db} from "../../config/db.js";
+import {and} from "drizzle-orm/sql/expressions/conditions";
 
 export const getAgentByEmail = async (email) => {
     return db.select().from(agent_registration).where(eq(agent_registration.agent_email,email))
@@ -17,7 +18,7 @@ export const approveMerchant = async (agent_email,merchant_email) => {
 }
 
 export const insertVerifiedMerchant = async (agent_email,merchant_email) => {
-    return db.insert(verified_merchant).values(agent_email,merchant_email);
+    return db.insert(verified_merchant).values({agent_email,merchant_email});
 }
 
 export const selectData = async () =>{
@@ -34,7 +35,19 @@ export const getAgent = async (email) => {
     return db.select({
             agent_name: agent_registration.agent_name,
             agent_email: agent_registration.agent_email,
+            agent_phone:agent_registration.agent_number
         }
     ).from(agent_registration)
         .where(eq(agent_registration.agent_email,email))
+}
+
+export const checkValidVerify = async (merchant_email,agent_email) => {
+    return db.select()
+        .from(agent_tasks)
+        .where(
+            and(
+                eq(agent_tasks.agentEmail,agent_email),
+                eq(agent_tasks.merchantEmail,merchant_email)
+            )
+        );
 }
