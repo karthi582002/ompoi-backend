@@ -59,3 +59,39 @@ export const merchantProfile = async (email) => {
         throw new Error("Error fetching merchant profile"); // Ensure the error is properly thrown
     }
 };
+//now
+export const addProductFieldsToDB = async ({ merchantId, sku, grade, subGrade, origin, quality, color, packing, quantity, unitPrice, moisture }) => {
+    try {
+        const [product] = await db.insert(product_skus).values({
+            merchantId,
+            sku,
+            grade,
+            subGrade,
+            origin,
+            quality,
+            color,
+            packing,
+            quantity,
+            unitPrice,
+            moisture
+        }).returning();
+        return product;
+    } catch (error) {
+        console.error("Error adding product fields to DB:", error);
+        throw new Error("Database Error: Unable to add product fields");
+    }
+};
+
+// Function to add product images to the database
+export const addProductImagesToDB = async ({ merchantId, sku, images }) => {
+    try {
+        if (images && images.length > 0) {
+            const imageEntries = images.map(imageUrl => ({ merchantId, sku, imageUrl }));
+            await db.insert(sku_resources).values(imageEntries);
+        }
+    } catch (error) {
+        console.error("Error adding product images to DB:", error);
+        throw new Error("Database Error: Unable to add product images");
+    }
+};
+

@@ -145,19 +145,43 @@ export const aboutMe = async (req, res) => {
 }
 
 export const addProducts = async (req, res) => {
-    try{
-        const data = req.merchant;
-        const {email,password} = req.body;
-        console.log(email)
-        console.log(password)
+    try {
+        const { sku, grade, subGrade, origin, quality, color, packing, quantity, unitPrice, moisture, images } = req.body;
+        const merchantId = req.merchant?.[0]?.merchantId;
+        const email = req.merchant?.[0]?.email;
 
-        res.status(200).json({
-            email,password
-        })
-    }catch (err){
-        console.error("Error in add Products in merchant controller:", err)
-        res.status(500).json({
-            error: "Internal Server Error",
-        })
+        if (!sku || !unitPrice || !quantity || !merchantId) {
+            return res.status(400).json({ error: "SKU, Unit Price, Quantity, and Merchant ID are required" });
+        }
+        console.log("Merchant Email:", email);
+        const product = await addProductFieldsToDB({
+            merchantId,
+            sku,
+            grade,
+            subGrade,
+            origin,
+            quality,
+            color,
+            packing,
+            quantity,
+            unitPrice,
+            moisture
+        });
+
+        if (images && images.length > 0) {
+            const processedImages = images.map(imageUrl => imageUrl.trim()).filter(imageUrl => imageUrl !== "");
+            if (processedImages.length > 0) {
+                await addProductImagesToDB({ merchantId, sku, images: processedImages });
+            }
+        }
+
+        return res.status(201).json({
+            message: "Product and images added successfully",
+            product,
+            email
+        });
+    } catch (err) {
+        console.error("Error in addProducts:", err);
+        res.status(500).json({ error: "Internal Server Error" });
     }
-}
+};
