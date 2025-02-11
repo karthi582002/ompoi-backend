@@ -10,6 +10,7 @@ import merchantRoute from "./routes/merchant.route.js";
 import cloudinary from 'cloudinary';
 import adminRoute from "./routes/auth.routes/admin.route.js";
 import authRoute from "./routes/auth.route.js";
+import buyerRoute from "./routes/buyer.routes/buyer.route.js";
 
 dotenv.config();
 const app = express();
@@ -35,6 +36,7 @@ app.use("/payment",paymentRoute)
 app.use("/merchant",merchantRoute)
 app.use("/admin",adminRoute)
 app.use("/auth",authRoute)
+app.use("/buyer",buyerRoute)
 
 
 

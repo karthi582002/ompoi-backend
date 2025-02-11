@@ -89,3 +89,13 @@ export const agent_tasks = mysqlTable("agent_tasks", {
     agentEmail : varchar("agentEmail",{length : 255}).notNull().references(()=> agent_registration.agent_email,{onDelete: "cascade"}),
     createdAt: timestamp("createdAt").defaultNow(),
 })
+
+export const buyer_registration = mysqlTable("buyer_registration", {
+    id: serial("id"),
+    companyName: varchar("companyName",{length : 255}).notNull(),
+    contactName: varchar("contactName",{length : 255}).notNull(),
+    contactEmail : varchar("contactEmail",{length : 255}).notNull().unique().primaryKey(),
+    contactPhone : varchar("contactPhone",{length : 13}).notNull().unique(),
+    billingAddress: varchar("billingAddress",{length : 255}).notNull(),
+    shippingAddress: varchar("shippingAddress",{length : 255}).notNull(),
+})
