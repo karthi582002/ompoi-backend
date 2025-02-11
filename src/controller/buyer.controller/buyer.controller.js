@@ -28,3 +28,13 @@ export const registerBuyer = async(req, res) => {
         })
     }
 }
+
+export const buyerLogin = async (req, res) => {
+    try {
+        // JD part
+        // refer merchant login but no otp feature
+    }catch (error){
+        console.log("Error in Buyer Login: "+ error);
+        res.status(500).send({error: "Internal Server Error"});
+    }
+}
