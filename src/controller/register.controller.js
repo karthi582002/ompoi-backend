@@ -171,3 +171,51 @@ export const checkAgentDetails = async (req, res) => {
         console.error("Error in checking agent controller :", error);
     }
 }
+
+export const checkGSTNumber = async (req, res) => {
+
+
+    /*
+            For testing Puropse these are some GSTIN Numbers
+            |-----------------|--------|
+            |      Number     |   0/1  |
+            |-----------------|--------|
+            | 27AIFPH3584H1Z5 |    0   |
+            |-----------------|--------|
+            | 35AAACC1206D1ZJ |    1   |
+            |-----------------|--------|
+
+     */
+    try{
+        const {gstNumber} = req.body
+        console.log(gstNumber)
+        const regex = /^\d{2}[A-Z]{5}\d{4}[A-Z]\d[Z]\w$/;
+        const isGstNumber = regex.test(gstNumber) ? gstNumber : false;
+        if (!isGstNumber) {
+            return res.status(400).json({
+                error: "Invalid Gst Number",
+            })
+        }
+        const data = await fetch(`https://razorpay.com/api/gstin/${isGstNumber}`).then(res => res.json());
+        // console.log(data.online_provider)
+        console.log(data.enrichment_details.online_provider.details);
+        const result = {
+            legal_name : data.enrichment_details.online_provider.details.legal_name.value,
+            status : data.enrichment_details.online_provider.details.status.value
+        }
+        if(result.status === "Cancelled"){
+            return res.status(401).json({
+                error: "Your GST Have Been cancelled So you can't Register..."
+            })
+        }
+        return res.status(200).json({
+            result
+        })
+    }catch(error) {
+        console.error("Error in checking gstNumber controller :", error);
+        return res.status(500).json({
+            error: "Internal Server Error while verifying status",
+        })
+    }
+
+}
