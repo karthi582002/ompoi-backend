@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import {getMerchantDetails} from "../model/merchant.model.js";
 import {getAgent} from "../model/agent.model/agentRegister.model.js";
+import {getBuyer} from "../model/buyer.model/buyer.model.js";
 
 export const protectedMerchantRoute =async (req, res,next) => {
     try {
