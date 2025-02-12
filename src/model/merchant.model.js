@@ -1,5 +1,5 @@
 import {db} from "../config/db.js";
-import {approved_merchant, merchant_registration} from "../db/schema.js";
+import {approved_merchant, merchant_registration, product_skus} from "../db/schema.js";
 import {eq} from "drizzle-orm";
 import app from "../app.js";
 import {or} from "drizzle-orm/sql/expressions/conditions";

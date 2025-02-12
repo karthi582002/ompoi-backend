@@ -1,4 +1,10 @@
-import {changeMerchantPassword, getMerchantDetails, getMerchantID, merchantProfile} from "../model/merchant.model.js";
+import {
+    addProductFieldsToDB, addProductImagesToDB,
+    changeMerchantPassword,
+    getMerchantDetails,
+    getMerchantID,
+    merchantProfile
+} from "../model/merchant.model.js";
 import bcrypt from "bcrypt";
 import {generateMerchantToken} from "../utils/generateToken..js";
 import {getUserByEmail} from "../model/register.model.js";
@@ -146,39 +152,38 @@ export const aboutMe = async (req, res) => {
 
 export const addProducts = async (req, res) => {
     try {
-        const { sku, grade, subGrade, origin, quality, color, packing, quantity, unitPrice, moisture, images } = req.body;
+        console.log("Files received: ", req.files); // Debugging
+        console.log("Body Data: ", req.body);
         const merchantId = req.merchant?.[0]?.merchantId;
-        const email = req.merchant?.[0]?.email;
-
-        if (!sku || !unitPrice || !quantity || !merchantId) {
-            return res.status(400).json({ error: "SKU, Unit Price, Quantity, and Merchant ID are required" });
-        }
+        const email = req.merchant?.[0]?.merchantEmail;
+        const C_images = req.files.map(file => file.path);
+        console.log(C_images);
         console.log("Merchant Email:", email);
-        const product = await addProductFieldsToDB({
-            merchantId,
-            sku,
-            grade,
-            subGrade,
-            origin,
-            quality,
-            color,
-            packing,
-            quantity,
-            unitPrice,
-            moisture
-        });
-
-        if (images && images.length > 0) {
-            const processedImages = images.map(imageUrl => imageUrl.trim()).filter(imageUrl => imageUrl !== "");
-            if (processedImages.length > 0) {
-                await addProductImagesToDB({ merchantId, sku, images: processedImages });
-            }
-        }
+        // const product = await addProductFieldsToDB({
+        //     merchantId,
+        //     sku,
+        //     grade,
+        //     subGrade,
+        //     origin,
+        //     quality,
+        //     color,
+        //     packing,
+        //     quantity,
+        //     unitPrice,
+        //     moisture
+        // });
+        //
+        // if (images && images.length > 0) {
+        //     const processedImages = images.map(imageUrl => imageUrl.trim()).filter(imageUrl => imageUrl !== "");
+        //     if (processedImages.length > 0) {
+        //         await addProductImagesToDB({ merchantId, sku, images: processedImages });
+        //     }
+        // }
 
         return res.status(201).json({
             message: "Product and images added successfully",
-            product,
-            email
+            email,
+            C_images
         });
     } catch (err) {
         console.error("Error in addProducts:", err);

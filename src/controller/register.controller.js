@@ -94,7 +94,6 @@ export const register =  async (req, res) => {
             return res.status(400).json({ error: "No file uploaded" });
         }
         const fileUrl = req.file.path;
-
         const otpToken = req.cookies.otpToken;
         // console.log(req.cookies);
         const data = req.body;

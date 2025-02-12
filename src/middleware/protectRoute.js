@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import {getMerchantDetails} from "../model/merchant.model.js";
 import {getAgent} from "../model/agent.model/agentRegister.model.js";
 import {getBuyer} from "../model/buyer.model/buyer.model.js";
+import {validationResult} from "express-validator";
 
 export const protectedMerchantRoute =async (req, res,next) => {
     try {
@@ -105,3 +106,12 @@ export const protectedBuyerRoute = async (req, res,next) =>{
         res.status(500).json({error : "Internal Server Error"});
     }
 }
+
+// future enhancement
+export const handleValidationErrors = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+};

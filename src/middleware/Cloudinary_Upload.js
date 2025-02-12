@@ -18,6 +18,23 @@ const storage = new CloudinaryStorage({
     },
 });
 
+const image_storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: async (req, file) => {
+        const isVideo = file.mimetype.startsWith("video/"); // Check if file is a video
+        return {
+            folder: "Products_Resources",
+            allowed_formats: ["jpg", "jpeg", "png", "mp4", "webp", "mov"],
+            resource_type: isVideo ? "video" : "image", // Set 'video' for videos, 'image' for images
+            transformation: isVideo
+                ? [{ width: 720, height: 1280, crop: "limit" }] // Video transformations
+                : [{ width: 500, height: 500, crop: "limit" }], // Image transformations
+        };
+    },
+});
+
+// const product_storage =
 
 
 export const upload = multer({ storage });
+export const uploadProducts = multer({ storage :image_storage });
