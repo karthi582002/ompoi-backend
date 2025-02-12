@@ -54,7 +54,7 @@ export const product_skus = mysqlTable("product_skus", {
     merchantId: varchar("merchant_id", {length:8}).notNull().references(()=>approved_merchant.merchantId,{onDelete:"cascade"}),
     productId: varchar("productId", { length: 50 }).primaryKey(),
     grade: varchar("grade", {length:50}).notNull(),
-    subGrade: varchar("sub_grade",{length:50}),
+    subGrade: varchar("sub_grade",{length:50}).default(null),
     origin: varchar("origin",{length:50}).notNull(),
     quality: varchar("quality",{length:20}).notNull(),
     color: varchar("color",{length:50}),
