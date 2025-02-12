@@ -22,3 +22,11 @@ export const registerBuyerModel = (data) => {
         shippingAddress:data.shippingAddress,
     })
 }
+
+export const getBuyer = (data) => {
+    return db.select().from(buyer_registration)
+    .where(or(
+        eq(buyer_registration.contactEmail,data),
+        eq(buyer_registration.contactPhone,data)
+    ))
+}
