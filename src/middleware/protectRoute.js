@@ -76,3 +76,31 @@ export const protectAdminRoute = async (req, res,next) =>{
         res.status(500).json({error : "Internal Server Error"});
     }
 }
+
+export const protectedBuyerRoute = async (req, res,next) =>{
+    try{
+        const token = req.cookies.buyer_jwt
+        if(!token){
+            return res.status(401).json({error : "Token Not Available"});
+        }
+        const decoded = jwt.sign(token,process.env.JWT_BUYER_SECRET);
+        if(!decoded){
+            return res.status(401).json({error : "Unauthorized Invalid Token"});
+        }
+        const buyer = await getBuyer(decoded.buyer_email);
+        if(!buyer){
+            return res.status(401).json({error : "Buyer Not Found"});
+        }
+        req.buyer = buyer;
+        next();
+
+    }catch(err){
+        if(err.name === "TokenExpiredError"){
+            return res.status(401).json({
+                error : "Session expired. Please log in again."
+            })
+        }
+        console.log("Error in protectRouter for buyer:" + err );
+        res.status(500).json({error : "Internal Server Error"});
+    }
+}
