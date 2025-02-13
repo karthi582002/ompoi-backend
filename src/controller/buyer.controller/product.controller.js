@@ -40,3 +40,31 @@ export const fetchSpecificProducts = async(req,res)=>{
         })
     }
 }
+
+export const deleteProductImage = async (req, res) => {
+    try {
+        const imageId = req.params.id
+        const imageCheck = await getProductImagesByIdWithMerchantId(imageId)
+        const merchantId = req.merchant?.[0].merchantId;
+        if (imageCheck.length === 0 ) {
+            return res.status(404).send({
+                error: "Image not found",
+            })
+        }
+        if(merchantId !== imageCheck[0].merchantId){
+            return res.status(401).send({
+                error: "This Image not belong to you",
+            })
+        }
+        await deleteProductImageModel(imageId);
+        res.status(200).send({
+            message : "Image deleted",
+        })
+    }catch(err){
+        console.log("Error while Deleting Image: "+err);
+        res.status(500).send({
+            error: "Internal Server Error",
+        })
+    }
+}
+
