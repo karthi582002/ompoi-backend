@@ -203,3 +203,55 @@ export const addProducts = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
+export const updateProducts = async (req, res) => {
+    try{
+        const productId = req.params.productId;
+        const bodyData = JSON.parse(JSON.stringify(req.body));
+        bodyData.quantity = Number(bodyData.quantity);
+        bodyData.unitPrice = Number(bodyData.unitPrice);
+        if(isNaN(bodyData.quantity)){
+            console.log("bodyData.unitPrice")
+        }
+        const merchantId = req.merchant?.[0]?.merchantId;
+        const C_images = req.files;
+        console.log(bodyData);
+
+        const existingProduct = await getProductByProductId(productId);
+        if(existingProduct.length === 0){
+            return res.status(404).json({ error: "Product not found" });
+        }
+        try{
+            await updateProductsById(productId, bodyData);
+        }catch (err){
+            console.error("Error updating Product: ", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
+        try {
+            // Add the images to a table
+            if (C_images && C_images.length > 0) {
+                for(const image of C_images) {
+                    const imageCloudinaryLink = image.path;
+                    console.log("C_image:", imageCloudinaryLink);
+                    if (imageCloudinaryLink.length > 0) {
+                        await addProductImagesToDB({
+                            merchantId,
+                            productId:bodyData.sku,
+                            photoUrl:imageCloudinaryLink,
+                        });
+                    }
+                }
+            }
+        }catch(err){
+            console.error("Error adding Product Image : ", err)
+            return res.status(500).json({
+                error: "Error while adding image",
+            })
+        }
+        res.status(200).json({
+            message: "Product updated successfully",
+        })
+    }catch(err){
+        console.error("Error updating Products for update:", err);
+    }
+}
