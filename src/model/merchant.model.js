@@ -1,5 +1,5 @@
 import {db} from "../config/db.js";
-import {approved_merchant, merchant_registration, product_skus} from "../db/schema.js";
+import {approved_merchant, merchant_registration, product_skus, sku_resources} from "../db/schema.js";
 import {eq} from "drizzle-orm";
 import app from "../app.js";
 import {or} from "drizzle-orm/sql/expressions/conditions";
@@ -60,38 +60,30 @@ export const merchantProfile = async (email) => {
     }
 };
 //now
-export const addProductFieldsToDB = async ({ merchantId, sku, grade, subGrade, origin, quality, color, packing, quantity, unitPrice, moisture }) => {
-    try {
-        const [product] = await db.insert(product_skus).values({
-            merchantId,
-            sku,
-            grade,
-            subGrade,
-            origin,
-            quality,
-            color,
-            packing,
-            quantity,
-            unitPrice,
-            moisture
-        }).returning();
-        return product;
-    } catch (error) {
-        console.error("Error adding product fields to DB:", error);
-        throw new Error("Database Error: Unable to add product fields");
-    }
+export const addProductFieldsToDB = async ({merchantId, bodyData}) => {
+    return  db.insert(product_skus).values({
+        merchantId: merchantId,
+        productId: bodyData.sku,
+        grade: bodyData.grade, // ✅ Explicitly ensure this field is included
+        subGrade: bodyData.subGrade || null, // ✅ Handle nullable field correctly
+        origin: bodyData.origin,
+        quality: bodyData.quality,
+        color: bodyData.color || null, // ✅ If color is optional, default to null
+        packing: bodyData.packing,
+        quantity: Number(bodyData.quantity), // ✅ Ensure it's an integer
+        unitPrice: parseFloat(bodyData.unitPrice), // ✅ Ensure it's a decimal
+        moisture: bodyData.moisture,
+        createdAt: new Date() // ✅ Ensure timestamp is explicitly set if needed
+    });
 };
 
 // Function to add product images to the database
-export const addProductImagesToDB = async ({ merchantId, sku, images }) => {
-    try {
-        if (images && images.length > 0) {
-            const imageEntries = images.map(imageUrl => ({ merchantId, sku, imageUrl }));
-            await db.insert(sku_resources).values(imageEntries);
-        }
-    } catch (error) {
-        console.error("Error adding product images to DB:", error);
-        throw new Error("Database Error: Unable to add product images");
-    }
+export const addProductImagesToDB = async ({merchantId,productId,photoUrl}) => {
+    console.log(photoUrl + "From Model");
+    return db.insert(sku_resources).values({
+        merchantId: merchantId,
+        productId: productId,
+        photoUrl: photoUrl,
+    });
 };
 

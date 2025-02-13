@@ -152,33 +152,46 @@ export const aboutMe = async (req, res) => {
 
 export const addProducts = async (req, res) => {
     try {
+        if(req.files.length)
         console.log("Files received: ", req.files); // Debugging
-        console.log("Body Data: ", req.body);
+        const bodyData = JSON.parse(JSON.stringify(req.body));
+        console.log("Body Data: ", bodyData);
         const merchantId = req.merchant?.[0]?.merchantId;
         const email = req.merchant?.[0]?.merchantEmail;
-        const C_images = req.files.map(file => file.path);
+        const C_images = req.files;
         console.log(C_images);
-        console.log("Merchant Email:", email);
-        // const product = await addProductFieldsToDB({
-        //     merchantId,
-        //     sku,
-        //     grade,
-        //     subGrade,
-        //     origin,
-        //     quality,
-        //     color,
-        //     packing,
-        //     quantity,
-        //     unitPrice,
-        //     moisture
-        // });
-        //
-        // if (images && images.length > 0) {
-        //     const processedImages = images.map(imageUrl => imageUrl.trim()).filter(imageUrl => imageUrl !== "");
-        //     if (processedImages.length > 0) {
-        //         await addProductImagesToDB({ merchantId, sku, images: processedImages });
-        //     }
-        // }
+        // add the fields to the DB
+        try{
+            await addProductFieldsToDB({
+                merchantId:merchantId,
+                bodyData:bodyData,
+            })
+        }catch (error) {
+            console.error("Insert Error:", error);
+            return res.status(500).json({ success: false, error: error.message });
+        }
+        try {
+            // Add the images to a table
+            if (C_images && C_images.length > 0) {
+                for(const image of C_images) {
+                    const imageCloudinaryLink = image.path;
+                    console.log("C_image:", imageCloudinaryLink);
+                    if (imageCloudinaryLink.length > 0) {
+                        await addProductImagesToDB({
+                            merchantId,
+                            productId:bodyData.sku,
+                            photoUrl:imageCloudinaryLink,
+                        });
+                    }
+                }
+            }
+        }catch(err){
+            console.error("Error adding Product Image : ", err)
+            return res.status(500).json({
+                error: "Error while adding image",
+            })
+
+        }
 
         return res.status(201).json({
             message: "Product and images added successfully",

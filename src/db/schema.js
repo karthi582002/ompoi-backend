@@ -54,14 +54,14 @@ export const product_skus = mysqlTable("product_skus", {
     merchantId: varchar("merchant_id", {length:8}).notNull().references(()=>approved_merchant.merchantId,{onDelete:"cascade"}),
     productId: varchar("productId", { length: 50 }).primaryKey(),
     grade: varchar("grade", {length:50}).notNull(),
-    subGrade: varchar("sub_grade",{length:50}).default(null),
+    subGrade: varchar("sub_grade",{length:50}).notNull(),
     origin: varchar("origin",{length:50}).notNull(),
     quality: varchar("quality",{length:20}).notNull(),
     color: varchar("color",{length:50}),
     packing: varchar("packing",{length:100}).notNull(),
     quantity: int("quantity").notNull(),
     unitPrice: decimal("unit_price", { precision: 10, scale: 2 }).notNull(),
-    moisture: boolean("moisture").default(false),
+    moisture: varchar("moisture",{length:3}).notNull(),
     createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -70,7 +70,7 @@ export const sku_resources = mysqlTable("sku_resources", {
     id: serial("id").primaryKey().autoincrement(),
     merchantId: varchar("merchant_id", { length: 8 }).notNull().references(() => approved_merchant.merchantId, { onDelete: "cascade" }),
     productId: varchar("productId", { length: 50 }).notNull().references(() => product_skus.productId, { onDelete: "cascade" }),
-    photoUrl: varchar("photo_url",{length: 255}),
+    photoUrl: varchar("photoUrl",{length: 255}).notNull(),
     createdAt: timestamp("created_at").defaultNow(),
 });
 
