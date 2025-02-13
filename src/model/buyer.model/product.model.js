@@ -2,6 +2,7 @@ import {product_skus, sku_resources} from "../../db/schema.js";
 import {eq} from "drizzle-orm";
 import {db} from "../../config/db.js";
 import {sql} from "drizzle-orm/sql/sql";
+import {or} from "drizzle-orm/sql/expressions/conditions";
 
 export const getAllProducts = () => {
     return db.select({
