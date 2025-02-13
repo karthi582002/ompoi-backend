@@ -16,4 +16,11 @@ router.post("/add-products",
     handleValidationErrors,
     addProducts,
 )
+router.put("/update-product",
+    protectedMerchantRoute,
+    uploadProducts.array('images',3),
+    validateProduct,
+    handleValidationErrors,
+    updateProducts
+)
 export default router;
