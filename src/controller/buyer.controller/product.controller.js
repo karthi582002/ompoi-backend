@@ -1,6 +1,7 @@
 import {
+    deleteProductImageModel,
     getAllProducts,
-    getProductByProductId, getProductImagesById
+    getProductByProductId, getProductImagesById, getProductImagesByIdWithMerchantId
 } from "../../model/buyer.model/product.model.js";
 
 export const fetchAllProducts = async(req,res)=>{
@@ -27,10 +28,10 @@ export const fetchSpecificProducts = async(req,res)=>{
             })
         }
         const productImages = await getProductImagesById(id)
-        console.log()
+        // console.log(productImages)
         const finalData = {
             productData: productData,
-            productImages: productImages[0].productImages,
+            productImages: productImages,
         };
         res.status(200).json(finalData);
     }catch(err){

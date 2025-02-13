@@ -9,6 +9,7 @@ import bcrypt from "bcrypt";
 import {generateMerchantToken} from "../utils/generateToken..js";
 import {getUserByEmail} from "../model/register.model.js";
 import twilio from "twilio";
+import {getProductByProductId, updateProductsById} from "../model/buyer.model/product.model.js";
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -190,7 +191,6 @@ export const addProducts = async (req, res) => {
             return res.status(500).json({
                 error: "Error while adding image",
             })
-
         }
 
         return res.status(201).json({
@@ -206,7 +206,8 @@ export const addProducts = async (req, res) => {
 
 export const updateProducts = async (req, res) => {
     try{
-        const productId = req.params.productId;
+        const productId = req.body.sku;
+        console.log("Files received: ", req.files); // Debugging
         const bodyData = JSON.parse(JSON.stringify(req.body));
         bodyData.quantity = Number(bodyData.quantity);
         bodyData.unitPrice = Number(bodyData.unitPrice);

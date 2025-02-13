@@ -10,6 +10,7 @@ import {
 import {handleValidationErrors, protectedMerchantRoute} from "../middleware/protectRoute.js";
 import {uploadProducts} from "../middleware/Cloudinary_Upload.js";
 import {validateProduct} from "../utils/BodyValidation.js";
+import {deleteProductImage} from "../controller/buyer.controller/product.controller.js";
 
 const router = express.Router();
 router.post("/id", getMerchantId);
