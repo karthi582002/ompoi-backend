@@ -31,11 +31,15 @@ export const getProductByProductId = (id) => {
 }
 
 export const getProductImagesById = (id) => {
-    return db.select({productImages: sql`JSON_ARRAYAGG(${sku_resources.photoUrl})`.as("productImages")})
-        .from(sku_resources)
-        .where(
-            eq(sku_resources.productId,id)
-        ).groupBy(sku_resources.productId)
+    return db.select({
+        id : sku_resources.id,
+        productImages: sku_resources.photoUrl
+    }).from(sku_resources)
+        .where(or(
+            eq(sku_resources.productId,id),
+            eq(sku_resources.id,id)
+            )
+        ).groupBy(sku_resources.productId,sku_resources.id)
 }
 
 export const getProductImagesByIdWithMerchantId = (id) => {
