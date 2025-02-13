@@ -37,3 +37,43 @@ export const getProductImagesById = (id) => {
             eq(sku_resources.productId,id)
         ).groupBy(sku_resources.productId)
 }
+
+export const getProductImagesByIdWithMerchantId = (id) => {
+    return db.select({
+        id : sku_resources.id,
+        merchantId : sku_resources.merchantId,
+        productImages: sku_resources.photoUrl
+    })
+        .from(sku_resources)
+        .where(or(
+                eq(sku_resources.productId,id),
+                eq(sku_resources.id,id)
+            )
+        ).groupBy(sku_resources.productId,sku_resources.id)
+}
+
+export const updateProductsById = (productId,bodyData) => {
+    return db.update(product_skus)
+        .set({
+            grade: bodyData.grade,
+            subGrade: bodyData.subGrade,
+            origin: bodyData.origin,
+            quality: bodyData.quality,
+            color: bodyData.color,
+            packing: bodyData.packing,
+            quantity: Number(bodyData.quantity),
+            unitPrice: parseFloat(bodyData.unitPrice),
+            moisture: bodyData.moisture,
+            createdAt: new Date()
+        })
+        .where(
+            eq(product_skus.productId,productId)
+        )
+}
+
+export const deleteProductImageModel = (id) => {
+    return db.delete(sku_resources)
+        .where(
+            eq(sku_resources.id,id)
+        )
+}
