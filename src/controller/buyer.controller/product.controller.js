@@ -1,4 +1,3 @@
-import {db} from "../../config/db.js";
 import {
     getAllProducts,
     getProductByProductId, getProductImagesById
