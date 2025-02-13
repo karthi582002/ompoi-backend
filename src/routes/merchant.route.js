@@ -1,5 +1,12 @@
 import express from "express";
-import {aboutMe, addProducts, forgetPassword, getMerchantId, merchantLogin} from "../controller/merchant.controller.js";
+import {
+    aboutMe,
+    addProducts,
+    forgetPassword,
+    getMerchantId,
+    merchantLogin,
+    updateProducts
+} from "../controller/merchant.controller.js";
 import {handleValidationErrors, protectedMerchantRoute} from "../middleware/protectRoute.js";
 import {uploadProducts} from "../middleware/Cloudinary_Upload.js";
 import {validateProduct} from "../utils/BodyValidation.js";
