@@ -11,7 +11,7 @@ router.post("/forget-password", forgetPassword,)
 router.get("/me",protectedMerchantRoute,aboutMe)
 router.post("/add-products",
     protectedMerchantRoute,
-    uploadProducts.array('images',5),
+    uploadProducts.array('images',3),
     validateProduct,
     handleValidationErrors,
     addProducts,
