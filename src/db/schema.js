@@ -65,7 +65,6 @@ export const product_skus = mysqlTable("product_skus", {
     createdAt: timestamp("created_at").defaultNow(),
 });
 
-
 export const sku_resources = mysqlTable("sku_resources", {
     id: serial("id").primaryKey().autoincrement(),
     merchantId: varchar("merchant_id", { length: 8 }).notNull().references(() => approved_merchant.merchantId, { onDelete: "cascade" }),
@@ -99,4 +98,14 @@ export const buyer_registration = mysqlTable("buyer_registration", {
     contactPhone : varchar("contactPhone",{length : 13}).notNull().unique(),
     billingAddress: varchar("billingAddress",{length : 255}).notNull(),
     shippingAddress: varchar("shippingAddress",{length : 255}).notNull(),
+})
+
+export const notifications = mysqlTable("notifications", {
+    id: serial("id").primaryKey(),
+    merchantId : varchar("merchantId",{length : 255}).notNull().references(()=>approved_merchant.merchantId,{onDelete: "cascade"}),
+    agentEmail : varchar("agentId",{length : 255}).notNull().references(()=> agent_registration.agent_email,{onDelete: "cascade"}),
+    messageFrom : varchar("messageFrom",{length : 255}).notNull().notNull(),
+    message : varchar("message",{length : 255}).notNull(),
+    isRead : boolean("isRead").default(false).notNull(),
+    createdAt : timestamp("created_at").defaultNow(),
 })
