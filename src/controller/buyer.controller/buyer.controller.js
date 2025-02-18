@@ -99,3 +99,21 @@ export const buyerLogin = async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 };
+
+export const fetchAllOrders = async (req, res) => {
+    try {
+        const buyer = req.buyer;
+        const buyerEmail = buyer[0].contactEmail
+        if (!buyerEmail || !buyerEmail.length) {
+            return res.status(404).json({ message: "No Buyer Found" });
+        }
+        const allOrders = await fetchAllOrdersByEmail(buyerEmail);
+        if(allOrders.length === 0){
+            return res.status(404).json({ message: "No Orders Found Place Your First Order" });
+        }
+        res.status(200).json(allOrders);
+    }catch (err){
+        console.log(err);
+        res.status(500).send({error: "Internal Server Error"});
+    }
+}
