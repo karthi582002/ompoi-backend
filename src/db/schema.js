@@ -109,3 +109,18 @@ export const notifications = mysqlTable("notifications", {
     isRead : boolean("isRead").default(false).notNull(),
     createdAt : timestamp("created_at").defaultNow(),
 })
+
+export const orders = mysqlTable("orders", {
+    orderID: varchar("orderID",{length:20}).primaryKey(),
+    merchantId : varchar("merchantId",{length:8}).references(()=> approved_merchant.merchantId,{onDelete: "cascade"}),
+    buyerEmail : varchar("buyerEmail",{length : 255}).references(()=> buyer_registration.contactEmail,{onDelete: "cascade"}),
+    productId : varchar("productId",{length : 50}).references(()=> product_skus.productId,{onDelete: "cascade"}),
+    quantity : varchar("quantity",{length : 8}).notNull(),
+    totalAmount :decimal("totalAmount",{precision:10,scale:2}).notNull(),
+    status : mysqlEnum("status",["pending","verified","processing","shipped","delivered"]).notNull().default("pending"),
+    verificationAgentId : varchar("verificationAgentId",{length : 255}).references(()=>agent_registration.agent_email,{onDelete: "cascade"}),
+    isPaid: boolean("isPaid").default(false),
+    isVerified: boolean("isVerified").default(false),
+    remarks: varchar("remarks",{length:225}),
+    orderTimestamp : timestamp("order-time").defaultNow(),
+})
