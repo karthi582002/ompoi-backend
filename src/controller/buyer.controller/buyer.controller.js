@@ -100,6 +100,48 @@ export const buyerLogin = async (req, res) => {
     }
 };
 
+export const createOrder = async (req, res) => {
+    try {
+        const {productId,quantity,remarks} = req.body;
+        const buyer = req.buyer;
+        if (!productId || !quantity) {
+            return res.status(400).json({ message: "Enter the Valid details" });
+        }
+        const product = await getProductByProductId(productId);
+        if (product.length === 0) {
+            return res.status(400).json({ message: "Product not found" });
+        }
+        if(quantity > product[0].quantity) {
+            return res.status(401).json({ message: `We Have only ${product[0].quantity} products Left ` });
+        }
+        const totalAmount = quantity * product[0].unitPrice;
+        const date = `${String(new Date().getDate()).padStart(2, "0")}${String(new Date().getMonth() + 1).padStart(2, "0")}${new Date().getFullYear()}`;
+        const randomNumbers = Math.floor(1000 + Math.random()*9999).toString();
+        // console.log(`${product[0].productId}-${date}-${buyer[0].id}-${randomNumbers}`)
+        const orderId = `${product[0].productId}-${date}-${buyer[0].id}-${randomNumbers}`
+        const data = {
+            orderId:orderId,
+            merchantId: product[0].merchantId,
+            buyerEmail : buyer[0].contactEmail,
+            productId,
+            quantity,
+            totalAmount,
+            remarks:remarks || null,
+        }
+        await addOrders(data)
+        await modifyQuantity(quantity,productId)
+        res.status(201).send({
+            message: "Order successfully created!",
+            orderId:orderId,
+        })
+        console.log(data)
+    }catch (error){
+        console.log("Error While Creating New Order" + error)
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+
+}
+
 export const fetchAllOrders = async (req, res) => {
     try {
         const buyer = req.buyer;
