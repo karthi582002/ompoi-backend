@@ -35,3 +35,11 @@ export const fetchAllOrdersByEmail = (buyerEmail) => {
     return db.select().from(orders)
         .where(eq(buyerEmail,orders.buyerEmail))
 }
+
+export const fetchSpecificOrderByOrderID = (buyerEmail,orderId) => {
+    return db.select().from(orders)
+        .where(and(
+            eq(orders.buyerEmail,buyerEmail),
+            eq(orders.orderId,orderId),
+        ))
+}
