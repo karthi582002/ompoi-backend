@@ -111,7 +111,7 @@ export const notifications = mysqlTable("notifications", {
 })
 
 export const orders = mysqlTable("orders", {
-    orderID: varchar("orderID",{length:20}).primaryKey(),
+    orderId: varchar("orderID",{length:50}).primaryKey(),
     merchantId : varchar("merchantId",{length:8}).references(()=> approved_merchant.merchantId,{onDelete: "cascade"}),
     buyerEmail : varchar("buyerEmail",{length : 255}).references(()=> buyer_registration.contactEmail,{onDelete: "cascade"}),
     productId : varchar("productId",{length : 50}).references(()=> product_skus.productId,{onDelete: "cascade"}),
