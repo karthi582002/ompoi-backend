@@ -31,6 +31,19 @@ export const getBuyer = (data) => {
     ))
 }
 
+export const addOrders = async (data) => {
+    console.log(data)
+    return db.insert(orders).values({
+        orderId:data.orderId,
+        merchantId: data.merchantId,
+        buyerEmail : data.buyerEmail,
+        productId: data.productId,
+        quantity: data.quantity,
+        totalAmount: data.totalAmount,
+        remarks:data.remarks || null,
+    })
+}
+
 export const fetchAllOrdersByEmail = (buyerEmail) => {
     return db.select().from(orders)
         .where(eq(buyerEmail,orders.buyerEmail))
