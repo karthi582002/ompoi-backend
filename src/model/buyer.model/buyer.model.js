@@ -30,3 +30,8 @@ export const getBuyer = (data) => {
         eq(buyer_registration.contactPhone,data)
     ))
 }
+
+export const fetchAllOrdersByEmail = (buyerEmail) => {
+    return db.select().from(orders)
+        .where(eq(buyerEmail,orders.buyerEmail))
+}
