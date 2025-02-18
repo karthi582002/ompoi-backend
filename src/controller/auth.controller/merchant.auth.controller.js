@@ -11,6 +11,17 @@ export const authCookieMerchant = async(req, res) => {
     }
 
 }
+export const authCookieBuyer = async(req, res) => {
+    try{
+        const buyer = req.buyer
+        console.log(req)
+        res.status(200).json({buyer: buyer})
+    }catch(err){
+        res.status(401).send({
+            message:"Invalid Token",
+        })
+    }
+}
 export const merchantLogout = async(req, res) => {
     try{
         res.clearCookie("merchant_jwt",{

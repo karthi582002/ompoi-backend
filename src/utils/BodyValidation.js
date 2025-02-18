@@ -24,7 +24,7 @@ export const validateProduct = [
     body("origin").notEmpty().isIn(["India","Benin","Togo","Benin","IVC","Tanzania","Conakry","Ogbomoso","Madagascar","Indonesia"]).withMessage("Origin is required"),
     body("quality").notEmpty().isIn(["Premium", "Good", "Average"]).withMessage("Quality is required"),
     body("color").notEmpty().isIn(["Light brown","Light ivory","Light ash-grey","Deep ivory","Yellow","Extra White","White","Pale ivory","Pale ash-grey","Light yellow"]).withMessage("Color is required"),
-    body("packing").notEmpty().isIN(["20 Kgs Tin","20 kgs vaccum","10 Kgs bucket","10X1 kg"]).withMessage("Packing type is required"),
+    body("packing").notEmpty().isIn(["20 Kgs Tin","20 kgs vaccum","10 Kgs bucket","10X1 kg"]).withMessage("Packing type is required"),
     body("quantity").isNumeric().withMessage("Quantity must be a number"),
     body("unitPrice").isFloat({ gt: 0 }).withMessage("Unit Price must be a positive number"),
     body("moisture").notEmpty().isIn(["Yes","No"]).withMessage("Moisture is required"),

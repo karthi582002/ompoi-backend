@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import {findBuyer, registerBuyerModel} from "../../model/buyer.model/buyer.model.js";
-import { generateBuyerToken } from  "../../utils/generateBuyerToken.js";
+import {generateBuyerToken} from "../../utils/generateToken..js";
 
 export const registerBuyer = async(req, res) => {
     try{
@@ -69,23 +69,33 @@ export const buyerLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.status(400).send("Email and password are required");
+            return res.status(400).json({ message: "Email and password are required" });
         }
         const getBuyer = await findBuyer(email);
-        console.log(getBuyer);
+
         if (!getBuyer || getBuyer.length === 0) {
-            return res.status(404).send("No Buyer Found");
-        }
-        const isValid = await bcrypt.compare(password, getBuyer[0].password);
-        if (!isValid) {
-            return res.status(400).send("Invalid Buyer Password");
+            return res.status(404).json({ message: "No Buyer Found" });
         }
 
-        await generateBuyerToken(getBuyer[0].contactEmail, res);
-        res.status(201).send("Buyer successfully logged in!");
-        
+        const buyer = getBuyer[0]; // Assuming first record is valid
+
+        if (!buyer.password) {
+            return res.status(500).json({ message: "Buyer record is incomplete" });
+        }
+
+        const isValid = await bcrypt.compare(password, buyer.password);
+
+        if (!isValid) {
+            return res.status(400).json({ message: "Invalid Buyer Password" });
+        }
+
+        // Generate Token (Assuming it sets a cookie)
+        await generateBuyerToken(email, res);
+
+        return res.status(200).json({ message: "Buyer successfully logged in!", buyer: { id: buyer.id, email: buyer.email } });
+
     } catch (err) {
-        console.log("Error in Buyer Login:", err);
-        return res.status(500).send("Internal Server Error");
+        console.error("Error in Buyer Login:", err);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };

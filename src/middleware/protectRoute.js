@@ -85,11 +85,12 @@ export const protectedBuyerRoute = async (req, res,next) =>{
         if(!token){
             return res.status(401).json({error : "Token Not Available"});
         }
-        const decoded = jwt.sign(token,process.env.JWT_BUYER_SECRET);
+        const decoded = jwt.verify(token,process.env.JWT_BUYER_SECRET);
         if(!decoded){
             return res.status(401).json({error : "Unauthorized Invalid Token"});
         }
         const buyer = await getBuyer(decoded.buyer_email);
+        console.log(decoded.buyer_email);
         if(!buyer){
             return res.status(401).json({error : "Buyer Not Found"});
         }
