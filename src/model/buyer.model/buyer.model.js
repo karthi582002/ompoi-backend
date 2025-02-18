@@ -43,3 +43,13 @@ export const fetchSpecificOrderByOrderID = (buyerEmail,orderId) => {
             eq(orders.orderId,orderId),
         ))
 }
+
+export const modifyQuantity = (quantity,productId) => {
+    return db.update(product_skus)
+        .set({
+            quantity: sql`${product_skus.quantity} - ${quantity}`
+        })
+        .where(eq(
+            product_skus.productId, productId
+        ))
+}
