@@ -117,3 +117,22 @@ export const fetchAllOrders = async (req, res) => {
         res.status(500).send({error: "Internal Server Error"});
     }
 }
+
+export const fetchSpecificOrder = async (req, res) => {
+    try{
+        const buyer = req.buyer;
+        const orderId = req.params.orderId;
+        const buyerEmail = buyer[0].contactEmail
+        if (!buyerEmail || !buyerEmail.length) {
+            return res.status(404).json({ message: "No Buyer Found" });
+        }
+        const specificOrder = await fetchSpecificOrderByOrderID(buyerEmail,orderId);
+        if(specificOrder.length === 0){
+            return res.status(404).json({ message: "No Order Found Check Your Order ID" });
+        }
+        return res.status(200).json(specificOrder);
+    }catch (err){
+        console.log("Error While Fetching Specific Product" + err);
+        res.status(500).send({error: "Internal Server Error"});
+    }
+}
