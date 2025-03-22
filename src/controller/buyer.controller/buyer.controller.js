@@ -1,6 +1,14 @@
 import bcrypt from "bcrypt";
-import {findBuyer, registerBuyerModel} from "../../model/buyer.model/buyer.model.js";
+import {
+    addOrders,
+    fetchAllOrdersByEmail,
+    fetchSpecificOrderByOrderID,
+    findBuyer, modifyQuantity,
+    registerBuyerModel
+} from "../../model/buyer.model/buyer.model.js";
 import {generateBuyerToken} from "../../utils/generateToken..js";
+import {fetchSpecificProducts} from "./product.controller.js";
+import {getProductByProductId} from "../../model/buyer.model/product.model.js";
 
 export const registerBuyer = async(req, res) => {
     try{
@@ -18,7 +26,7 @@ export const registerBuyer = async(req, res) => {
         if (existingBuyerPhone.length !== 0) {
             return res.status(400).send({error: 'Phone Number already exists'});
         }
-        console.log(req.body)
+        // console.log(req.body)
         const result = await registerBuyerModel(req.body)
         return res.status(201).send(result);
 
@@ -29,6 +37,7 @@ export const registerBuyer = async(req, res) => {
         })
     }
 }
+
 /*
 
 export const buyerLogin = async (req, res) => {
@@ -65,6 +74,7 @@ export const buyerLogin=async(req, res)=>{
 
 }
 */
+
 export const buyerLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -163,12 +173,13 @@ export const fetchAllOrders = async (req, res) => {
 export const fetchSpecificOrder = async (req, res) => {
     try{
         const buyer = req.buyer;
-        const orderId = req.params.orderId;
+        const orderId = req.params.id;
+        console.log(orderId);
         const buyerEmail = buyer[0].contactEmail
         if (!buyerEmail || !buyerEmail.length) {
             return res.status(404).json({ message: "No Buyer Found" });
         }
-        const specificOrder = await fetchSpecificOrderByOrderID(buyerEmail,orderId);
+        const specificOrder = await fetchSpecificOrderByOrderID(orderId);
         if(specificOrder.length === 0){
             return res.status(404).json({ message: "No Order Found Check Your Order ID" });
         }
