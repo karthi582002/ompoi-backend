@@ -11,6 +11,7 @@ import cloudinary from 'cloudinary';
 import adminRoute from "./routes/auth.routes/admin.route.js";
 import authRoute from "./routes/auth.route.js";
 import buyerRoute from "./routes/buyer.routes/buyer.route.js";
+import rateLimit from "express-rate-limit"
 
 dotenv.config();
 const app = express();
