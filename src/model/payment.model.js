@@ -1,5 +1,5 @@
 import {db} from "../config/db.js";
-import {approved_merchant, merchant_registration, registration_payment} from "../db/schema.js";
+import {approved_merchant, merchant_registration, order_payments, orders, registration_payment} from "../db/schema.js";
 import {eq} from "drizzle-orm";
 
 export const savePaymentDetails = async (data) => {
