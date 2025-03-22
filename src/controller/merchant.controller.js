@@ -256,3 +256,28 @@ export const updateProducts = async (req, res) => {
         console.error("Error updating Products for update:", err);
     }
 }
+
+export const changeStatus = async (req, res) => {
+   try{
+       const status = req.body.status;
+       const orderId = req.body.orderId;
+       const merchantId = req.merchant[0].merchantId;
+       const order = await fetchSpecificOrderByOrderID(orderId);
+       console.log(order);
+       if(order.length === 0 ){
+           return res.status(404).json({ error: "Order not found." });
+       }
+       if(merchantId !== order[0].merchantId){
+           return res.status(401).json({ error: "You Cannot Modify This order" });
+       }
+       await updateStatusOfOrder(orderId,status);
+       return res.status(200).json({
+           message: "Order Modified successfully",
+       })
+   }catch(err){
+       console.error("error in modifying product merchant Controller: ", err);
+       return res.status(500).json({
+           error: "Internal Server Error"
+       })
+   }
+}
