@@ -197,7 +197,7 @@ export const checkGSTNumber = async (req, res) => {
         }
         const data = await fetch(`https://razorpay.com/api/gstin/${isGstNumber}`).then(res => res.json());
         // console.log(data.online_provider)
-        console.log(data.enrichment_details.online_provider.details);
+        // console.log(data.enrichment_details.online_provider.details);
         const result = {
             legal_name : data.enrichment_details.online_provider.details.legal_name.value,
             status : data.enrichment_details.online_provider.details.status.value
