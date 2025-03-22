@@ -1,5 +1,10 @@
 import express from 'express';
-import {assignSellerToAgent, loginAdmin, registerAdmin} from "../../controller/admin.controller/admin.controller.js";
+import {
+    assignOrderVerificationToAgent,
+    assignSellerToAgent,
+    loginAdmin,
+    registerAdmin
+} from "../../controller/admin.controller/admin.controller.js";
 import {protectAdminRoute} from "../../middleware/protectRoute.js";
 const router = express.Router()
 
