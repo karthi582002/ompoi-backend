@@ -1,5 +1,10 @@
 import express from "express";
-import {buyerLogin, registerBuyer} from "../../controller/buyer.controller/buyer.controller.js";
+import {
+    buyerLogin, createOrder,
+    fetchAllOrders,
+    fetchSpecificOrder,
+    registerBuyer
+} from "../../controller/buyer.controller/buyer.controller.js";
 import {fetchAllProducts, fetchSpecificProducts} from "../../controller/buyer.controller/product.controller.js";
 
 const router = express.Router();
