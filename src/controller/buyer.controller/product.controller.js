@@ -35,7 +35,7 @@ export const fetchSpecificProducts = async(req,res)=>{
         };
         res.status(200).json(finalData);
     }catch(err){
-        console.log("Error while Fetching Specific Products : "+err);
+        console.log("Error while Fetching Specific Products : "+ err);
         res.status(500).send({
             error: "Internal Server Error",
         })
