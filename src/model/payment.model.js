@@ -19,3 +19,14 @@ export const addMerchantLogin = async (merchantId, email, password) => {
         password,
     })
 }
+
+// orders Payment
+
+export const changePaymentStatus = async (orderId) => {
+    return db.update(orders).set({isPaid: true})
+        .where(eq(orders.orderId, orderId))
+}
+
+export const trackPayment = async (data) => {
+    return db.insert(order_payments).values([data])
+}
