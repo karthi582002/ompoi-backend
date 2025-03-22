@@ -9,6 +9,7 @@ import {generateAdminToken} from "../../utils/generateToken..js";
 import {getMerchantDetails, getMerchantID} from "../../model/merchant.model.js";
 import {getAgentByEmail} from "../../model/agent.model/agentRegister.model.js";
 import {getUserByEmail} from "../../model/register.model.js";
+import {fetchSpecificOrderByOrderID} from "../../model/buyer.model/buyer.model.js";
 
 export const registerAdmin = async (req, res) => {
     try {
