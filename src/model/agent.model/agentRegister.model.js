@@ -51,3 +51,29 @@ export const checkValidVerify = async (merchant_email,agent_email) => {
             )
         );
 }
+
+export const checkValidOrderVerify = async (agent_email,order_id) => {
+    return db.select()
+    .from(orders)
+        .where(
+            and(
+                eq(orders.verificationAgentId,agent_email),
+                eq(orders.orderId,order_id),
+                eq(orders.isVerified, false)
+            )
+        );
+}
+
+export const addVerifiedStatusInOrder = async (order_id,agent_email) => {
+    return db.update(orders)
+        .set({
+            isVerified: true,
+            status: "verified"
+        })
+        .where(
+            and(
+                eq(orders.verificationAgentId,agent_email),
+                eq(orders.orderId,order_id)
+            )
+        );
+}
