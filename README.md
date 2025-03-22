@@ -169,7 +169,7 @@ CLOUDINARY_CLOUD_NAME=
 ---
 
 ## **👤 Developed By**  
-### **Karthikeyan S**  
+### **Karthikeyan M**  
 *Full Stack Developer | Passionate about Building Scalable Applications*  
 
 Connect with me on:  
