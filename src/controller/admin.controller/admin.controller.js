@@ -34,7 +34,7 @@ export const loginAdmin = async (req, res) => {
     try {
         const {email, password} = req.body;
         if (!email || !password) {
-            return res.status(400).send("Email and password is required");
+            return res.status(401).send("Email and password is required");
         }
         const getAdmin = await getAdminByEmail(email)
         console.log(getAdmin);
