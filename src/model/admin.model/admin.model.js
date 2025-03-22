@@ -24,3 +24,22 @@ export const checkMerchantInTaskTable = async (email) => {
         .from(agent_tasks)
         .where(eq(agent_tasks.merchantEmail, email))
 }
+
+export const assignTaskToAgentOrders = async (data) => {
+    return db.insert(agent_orders_task).values([data])
+}
+
+export const checkOrderInTaskTable = async (orderId) => {
+    return db.select()
+        .from(agent_orders_task)
+        .where(eq(agent_orders_task.orderId,orderId))
+}
+
+export const addAgentNameToOrderTable = async (agentEmail,orderId) => {
+    return db.update(orders).set({
+        verificationAgentId:agentEmail,
+    })
+        .where(
+            eq(orderId,orders.orderId),
+        )
+}
