@@ -7,5 +7,8 @@ router.post("/register",registerBuyer)
 router.post("/login",buyerLogin)
 router.get("/all-products",fetchAllProducts)
 router.get("/product/:id",fetchSpecificProducts)
+router.post("/create-order",protectedBuyerRoute,createOrder)
+router.get("/my-orders",protectedBuyerRoute,fetchAllOrders)
+router.get("/my-orders/:id",protectedBuyerRoute,fetchSpecificOrder)
 
 export default router;
