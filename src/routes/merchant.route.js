@@ -1,7 +1,7 @@
 import express from "express";
 import {
     aboutMe,
-    addProducts,
+    addProducts, changeStatus,
     forgetPassword,
     getMerchantId,
     merchantLogin,
