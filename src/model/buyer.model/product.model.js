@@ -82,3 +82,11 @@ export const deleteProductImageModel = (id) => {
             eq(sku_resources.id,id)
         )
 }
+
+export const updateStatusOfOrder = (orderId,status) => {
+    return db.update(orders).set({
+        status : status
+    }).where(
+        eq(orderId,orders.orderId)
+    )
+}
