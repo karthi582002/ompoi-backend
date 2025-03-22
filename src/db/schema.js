@@ -124,3 +124,21 @@ export const orders = mysqlTable("orders", {
     remarks: varchar("remarks",{length:225}),
     orderTimestamp : timestamp("order-time").defaultNow(),
 })
+
+export const agent_orders_task = mysqlTable("agent_orders_task", {
+    id: serial("id").primaryKey(),
+    merchantId : varchar("merchantEmail",{length : 255}).notNull().references(()=> approved_merchant.merchantId,{onDelete: "cascade"}),
+    agentEmail : varchar("agentEmail",{length : 255}).notNull().references(()=> agent_registration.agent_email,{onDelete: "cascade"}),
+    orderId :   varchar("orderId", {length:50}).notNull().references(()=> orders.orderId,{onDelete: "cascade"}),
+    createdAt: timestamp("createdAt").defaultNow(),
+})
+
+export const order_payments = mysqlTable("order_payments", {
+    id: serial("id"),
+    orderId: varchar("order_id", {length: 255}).notNull(),
+    paymentId: varchar("payment_id",{length: 255}).notNull(),
+    buyerEmail: varchar("buyer_email",{length: 255}).notNull().references(()=> buyer_registration.contactEmail,{onDelete : "cascade"}),
+    amount: decimal("amount",{precision:10,scale:2}).notNull(),
+    status: varchar("status",{length: 255}).default("PENDING"),
+    createdAt: timestamp("created_at").defaultNow(),
+})
