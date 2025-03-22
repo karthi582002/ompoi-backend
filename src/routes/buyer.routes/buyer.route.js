@@ -6,6 +6,7 @@ import {
     registerBuyer
 } from "../../controller/buyer.controller/buyer.controller.js";
 import {fetchAllProducts, fetchSpecificProducts} from "../../controller/buyer.controller/product.controller.js";
+import {protectedBuyerRoute} from "../../middleware/protectRoute.js";
 
 const router = express.Router();
 router.post("/register",registerBuyer)
