@@ -32,4 +32,5 @@ router.put("/update-product",
     updateProducts
 )
 router.delete("/remove/image/:id",protectedMerchantRoute,deleteProductImage)
+router.post("/update/order",protectedMerchantRoute,updateOrderValidation, handleValidationErrors ,changeStatus)
 export default router;
