@@ -52,10 +52,7 @@ export const fetchAllOrdersByEmail = (buyerEmail) => {
 
 export const fetchSpecificOrderByOrderID = (orderId) => {
     return db.select().from(orders)
-        .where(and(
-            eq(orders.buyerEmail,buyerEmail),
-            eq(orders.orderId,orderId),
-        ))
+        .where(eq(orders.orderId,orderId),)
 }
 
 export const modifyQuantity = (quantity,productId) => {
