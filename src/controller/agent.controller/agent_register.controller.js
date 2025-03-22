@@ -8,7 +8,7 @@ import {
 } from "../../model/agent.model/agentRegister.model.js";
 import {generateAgentToken} from "../../utils/generateToken..js";
 import {getUserByEmail} from "../../model/register.model.js";
-import {checkMerchantInTaskTable} from "../../model/admin.model/admin.model.js";
+
 
 
 export const registerAgentController = async (req,res) => {
