@@ -1,7 +1,8 @@
 import {db} from "../../config/db.js";
-import {buyer_registration} from "../../db/schema.js";
-import {or} from "drizzle-orm/sql/expressions/conditions";
-import {eq} from "drizzle-orm";
+import {buyer_registration, orders, product_skus} from "../../db/schema.js";
+import {and, or} from "drizzle-orm/sql/expressions/conditions";
+import {eq,sql} from "drizzle-orm";
+
 
 export const findBuyer = (data) => {
     return db.select().from(buyer_registration)
