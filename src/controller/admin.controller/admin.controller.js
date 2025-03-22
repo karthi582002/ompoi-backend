@@ -1,7 +1,7 @@
 import {
-    addAdmin,
-    assignTaskToAgent,
-    checkMerchantInTaskTable,
+    addAdmin, addAgentNameToOrderTable,
+    assignTaskToAgent, assignTaskToAgentOrders,
+    checkMerchantInTaskTable, checkOrderInTaskTable,
     getAdminByEmail
 } from "../../model/admin.model/admin.model.js";
 import bcrypt from "bcrypt";
