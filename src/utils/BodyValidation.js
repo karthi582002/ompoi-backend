@@ -43,3 +43,8 @@ export const validateMerchantRegistration = [
     body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
     body("documents").notEmpty().withMessage("At least one document (PDF) is required"),
 ];
+
+export const updateOrderValidation = [
+    body("orderId").notEmpty().withMessage("Order ID is required"),
+    body("status").isIn(["processing", "delivered", "shipped"]).withMessage("Invalid status"),
+];
