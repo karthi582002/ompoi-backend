@@ -1,4 +1,4 @@
-import {agent_registration, agent_tasks, merchant_registration, verified_merchant} from "../../db/schema.js";
+import {agent_registration, agent_tasks, merchant_registration, orders, verified_merchant} from "../../db/schema.js";
 import {eq} from "drizzle-orm";
 import {db} from "../../config/db.js";
 import {and} from "drizzle-orm/sql/expressions/conditions";
