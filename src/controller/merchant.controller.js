@@ -9,7 +9,8 @@ import bcrypt from "bcrypt";
 import {generateMerchantToken} from "../utils/generateToken..js";
 import {getUserByEmail} from "../model/register.model.js";
 import twilio from "twilio";
-import {getProductByProductId, updateProductsById} from "../model/buyer.model/product.model.js";
+import {getProductByProductId, updateProductsById, updateStatusOfOrder} from "../model/buyer.model/product.model.js";
+import {fetchSpecificOrderByOrderID} from "../model/buyer.model/buyer.model.js";
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
