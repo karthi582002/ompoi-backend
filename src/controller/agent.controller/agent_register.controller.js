@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import {
-    approveMerchant, checkValidVerify,
+    addVerifiedStatusInOrder,
+    approveMerchant, checkValidOrderVerify, checkValidVerify,
     getAgentByEmail,
     insertVerifiedMerchant,
     registerAgent, selectData
