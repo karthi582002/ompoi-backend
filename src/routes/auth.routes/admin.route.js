@@ -11,6 +11,7 @@ const router = express.Router()
 router.post("/register",registerAdmin);
 router.post("/login",loginAdmin)
 router.post("/assign-agent-seller",protectAdminRoute,assignSellerToAgent)
+router.post("/assign-agent-order",protectAdminRoute,assignOrderVerificationToAgent)
 // test
 router.get("/",protectAdminRoute,(req,res)=> {
     const adminEmail = req.adminEmail;
