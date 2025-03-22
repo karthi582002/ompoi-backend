@@ -43,7 +43,7 @@ export const loginAdmin = async (req, res) => {
         }
         const isValid = await bcrypt.compare(password, getAdmin[0]?.adminPassword);
         if (!isValid) {
-            return res.status(400).send("Invalid Admin Password");
+            return res.status(401).send("Invalid Admin Password");
         }
         await generateAdminToken(getAdmin[0].adminEmail,res)
         res.status(201).send("Admin successfully logged in!");
