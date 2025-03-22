@@ -1,5 +1,7 @@
 import express from 'express';
 import {requestPayment, verifyPayment} from "../controller/payment.controller.js";
+import {createOrderPayment, verifyOrderPayment} from "../controller/buyer.controller/buyerOrders.controller.js";
+import {protectedBuyerRoute} from "../middleware/protectRoute.js";
 
 const router = express.Router();
 // registration payment
