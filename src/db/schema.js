@@ -1,4 +1,5 @@
 import { mysqlTable, serial, varchar,boolean,decimal,int,timestamp } from "drizzle-orm/mysql-core";
+import {mysqlEnum} from "drizzle-orm/mysql-core/columns/enum";
 
 
 export const merchant_registration = mysqlTable("merchant_registration", {
