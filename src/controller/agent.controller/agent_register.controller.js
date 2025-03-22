@@ -102,6 +102,31 @@ export const aproveMerchantController = async (req,res) => {
     }
 }
 
+export const aproveOrderController = async (req,res) => {
+    try{
+        const {order_id} = req.body;
+        const agentEmail = req.agent[0].agent_email;
+        // console.log(agentEmail)
+        // console.log(order_id)
+        const validOrder = await checkValidOrderVerify(agentEmail,order_id);
+        if(validOrder.length === 0){
+            return res.status(401).json({
+                error: "Invalid Attempt",
+            })
+        }
+        const result = await addVerifiedStatusInOrder(order_id,agentEmail)
+        console.log(result)
+        res.status(200).json({
+            message: 'Order successfully verified',
+        })
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            message: "Internal Server Error",
+        })
+    }
+}
+
 export const test_join = async (req, res) => {
     try {
         const result = await selectData(); // Fetch data from DB
