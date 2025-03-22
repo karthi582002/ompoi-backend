@@ -1,4 +1,4 @@
-import {product_skus, sku_resources} from "../../db/schema.js";
+import {orders, product_skus, sku_resources} from "../../db/schema.js";
 import {eq} from "drizzle-orm";
 import {db} from "../../config/db.js";
 import {sql} from "drizzle-orm/sql/sql";
