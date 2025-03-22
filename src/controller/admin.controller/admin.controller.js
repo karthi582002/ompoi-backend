@@ -41,7 +41,7 @@ export const loginAdmin = async (req, res) => {
         if (getAdmin?.length === 0) {
             return res.status(404).send("No Admin Found");
         }
-        const isValid = await bcrypt.compare(password, getAdmin[0].adminPassword);
+        const isValid = await bcrypt.compare(password, getAdmin[0]?.adminPassword);
         if (!isValid) {
             return res.status(400).send("Invalid Admin Password");
         }
