@@ -11,17 +11,17 @@ import cloudinary from 'cloudinary';
 import adminRoute from "./routes/auth.routes/admin.route.js";
 import authRoute from "./routes/auth.route.js";
 import buyerRoute from "./routes/buyer.routes/buyer.route.js";
-import rateLimit from "express-rate-limit"
+// import rateLimit from "express-rate-limit"
 
 dotenv.config();
 const app = express();
 
-const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 10, // Limit each IP to 10 requests per minute
-    message: "Too many requests, please try again later.",
-});
-app.use(limiter);
+// const limiter = rateLimit({
+//     windowMs: 1 * 60 * 1000, // 1 minute
+//     max: 10, // Limit each IP to 10 requests per minute
+//     message: "Too many requests, please try again later.",
+// });
+// app.use(limiter);
 app.use(cors({
     origin: "http://localhost:5173", // Frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"],
