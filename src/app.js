@@ -27,35 +27,35 @@ const allowedOrigins = [
     // "https://yourfrontend.com" // Production Frontend
 ];
 
-app.use((req, res, next) => {
-    const origin = req.headers.origin;
+// app.use((req, res, next) => {
+//     const origin = req.headers.origin;
     
-    if (!allowedOrigins.includes(origin)) {
-        return res.status(403).json({ message: "Access Denied: Unauthorized Origin" });
-    }
+//     if (!allowedOrigins.includes(origin)) {
+//         return res.status(403).json({ message: "Access Denied: Unauthorized Origin" });
+//     }
     
-    res.header("Access-Control-Allow-Origin", origin);
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
+//     res.header("Access-Control-Allow-Origin", origin);
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     res.header("Access-Control-Allow-Credentials", "true");
     
-    if (req.method === "OPTIONS") {
-        return res.sendStatus(200);
-    }
+//     if (req.method === "OPTIONS") {
+//         return res.sendStatus(200);
+//     }
     
-    next();
-});
+//     next();
+// });
 
-app.use((req, res, next) => {
-    const userAgent = req.headers["user-agent"] || "";
+// app.use((req, res, next) => {
+//     const userAgent = req.headers["user-agent"] || "";
     
-    // Block Postman and Curl requests
-    if (userAgent.includes("Postman") || userAgent.includes("curl") || userAgent.includes("HTTPie")) {
-        return res.status(403).json({ message: "Access Denied: Unauthorized Client" });
-    }
+//     // Block Postman and Curl requests
+//     if (userAgent.includes("Postman") || userAgent.includes("curl") || userAgent.includes("HTTPie")) {
+//         return res.status(403).json({ message: "Access Denied: Unauthorized Client" });
+//     }
     
-    next();
-});
+//     next();
+// });
 
 app.use((req, res, next) => {
     const apiKey = req.headers["x-api-key"];
