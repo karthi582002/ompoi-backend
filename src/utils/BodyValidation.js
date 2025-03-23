@@ -12,14 +12,14 @@ export const validateProduct = [
                 }
                 return true;
             } else if (req.body.grade === "Raw") {
-                if (value) {
+                if (value !== "Null") {
                     throw new Error("SubGrade must be null for Raw Cashew");
                 }
                 return true;
             }
             return true;
         }),
-   // body("grade").notEmpty().isIn(["Raw","kernels"]).withMessage("Grade is required"),
+   body("grade").notEmpty().isIn(["Raw","kernels"]).withMessage("Grade is required"),
     body("subGrade").notEmpty().isIn(["Null","W180","W210","W240","W320","W400","W mix","SW240","SW320","SSW","SW","DW","KW","OW","NW","JJH","JH","SJH","JH-2","LWP","LWP-2","JK","SWP","SP","SP-2","BB","BB-2","White Lolly"]).withMessage("SubGrade is required"),
     body("origin").notEmpty().isIn(["India","Benin","Togo","Benin","IVC","Tanzania","Conakry","Ogbomoso","Madagascar","Indonesia"]).withMessage("Origin is required"),
     body("quality").notEmpty().isIn(["Premium", "Good", "Average"]).withMessage("Quality is required"),
