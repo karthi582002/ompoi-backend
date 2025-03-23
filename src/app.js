@@ -48,6 +48,6 @@ app.use("/buyer",buyerRoute)
 
 
 app.get("/", (req, res) => {
-    res.send("Welcome to the Karthi!");
+    res.send("Welcome to OMPOI Backend Inum SQL Host panla yena company kitta kasu illa 😊😌");
 })
 export default app;
