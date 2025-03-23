@@ -21,7 +21,7 @@ const limiter = rateLimit({
     max: 10, // Limit each IP to 10 requests per minute
     message: "Too many requests, please try again later.",
 });
-app.use(limiter);
+// app.use(limiter);
 app.use(cors({
     origin: "http://localhost:5173", // Frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"],

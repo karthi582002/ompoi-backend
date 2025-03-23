@@ -33,7 +33,7 @@ services:
   database:
     image: mysql:8
     environment:
-      DATABASE_URL: mysql://root:K.582002@backend-database-1:3306/karthi_college
+      DATABASE_URL: mysql://root:K.582002@backend-database-1:3306/karthi_collegee
       DB_HOST: backend-database-1
       DB_USER: root
       DB_PASSWORD: K.582002
