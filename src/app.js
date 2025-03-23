@@ -22,10 +22,21 @@ const app = express();
 //     message: "Too many requests, please try again later.",
 // });
 // app.use(limiter);
+const allowedOrigins = [
+    // "http://localhost:5173", // Local frontend (for development)
+    // "https://yourfrontend.com" // Production frontend
+];
+
 app.use(cors({
-    origin: "http://localhost:5173", // Frontend URL
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true); // Allow the request
+        } else {
+            callback(new Error("Not allowed by CORS")); // Block the request
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true // Allow cookies if needed
+    credentials: true, // Allow cookies if needed
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
