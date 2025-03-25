@@ -52,6 +52,16 @@ export const checkValidVerify = async (merchant_email,agent_email) => {
         );
 }
 
+
+export const updateMerchantTaskCompletion = async(status,agent_email) => {
+    return db.update(agent_tasks).
+    set({
+        status: status,
+    }).where(
+            eq(agent_tasks.agentEmail,agent_email),
+    )
+}
+
 export const checkValidOrderVerify = async (agent_email,order_id) => {
     return db.select()
     .from(orders)
