@@ -24,6 +24,11 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// will be adding our front-end url after Hosting
+const allowedOrigins = [
+     "http://localhost:5173", // Development Frontend
+     // "https://yourfrontend.com" // Production Frontend
+];
 
 // Only Valid Users can connect with our backend
 app.use((req, res, next) => {
