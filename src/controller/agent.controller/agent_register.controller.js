@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
 import {
     addVerifiedStatusInOrder,
-    approveMerchant, checkValidOrderVerify, checkValidVerify,
-    getAgentByEmail,
-    insertVerifiedMerchant,
-    registerAgent, selectData
+    approveMerchant, checkValidOrderVerify, checkValidVerify, checkVerifiedMerchant,
+    getAgentByEmail, getAgentNotificationsFromDB,
+    insertVerifiedMerchant, markAsReadAgentNotifications,
+    registerAgent, selectData, updateMerchantTaskCompletion
 } from "../../model/agent.model/agentRegister.model.js";
 import {generateAgentToken} from "../../utils/generateToken..js";
 import {getUserByEmail} from "../../model/register.model.js";
