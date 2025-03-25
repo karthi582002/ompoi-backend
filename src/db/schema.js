@@ -144,3 +144,12 @@ export const order_payments = mysqlTable("order_payments", {
     status: varchar("status",{length: 255}).default("PENDING"),
     createdAt: timestamp("created_at").defaultNow(),
 })
+
+export const agent_notifications = mysqlTable("agent_notifications", {
+    id: serial("id").primaryKey(),
+    agentId : varchar("agentId",{length : 255}).references(()=>agent_registration.agent_email,{onDelete: "cascade"}),
+    taskName: varchar("taskName",{length : 50}).notNull(),
+    message : varchar("message",{length : 255}).notNull(),
+    isRead : boolean("isRead").default(false).notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+})
