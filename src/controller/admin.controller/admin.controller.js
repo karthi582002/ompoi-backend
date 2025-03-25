@@ -1,5 +1,5 @@
 import {
-    addAdmin, addAgentNameToOrderTable,
+    addAdmin, addAgentNameToOrderTable, addAgentNotification,
     assignTaskToAgent, assignTaskToAgentOrders,
     checkMerchantInTaskTable, checkOrderInTaskTable,
     getAdminByEmail
