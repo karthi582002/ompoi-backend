@@ -157,3 +157,26 @@ export const test_join = async (req, res) => {
         });
     }
 };
+
+
+export const getAgentNotifications = async (req,res) => {
+    try {
+        const agentEmail = req.agent[0].agent_email;
+        console.log(agentEmail)
+        const notifications = await getAgentNotificationsFromDB(agentEmail);
+        await markAsReadAgentNotifications(agentEmail);
+        if (notifications.length === 0) {
+            return res.status(200).json({
+                message: "No Notifications",
+            })
+        }
+        return res.status(200).json({
+            notifications,
+        })
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            message: "Internal Server Error",
+        })
+    }
+}
