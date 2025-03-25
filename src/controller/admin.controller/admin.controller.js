@@ -82,6 +82,9 @@ export const assignSellerToAgent = async (req, res) => {
             })
         }
         await assignTaskToAgent(data);
+        const message = `Verify New Merchant ${merchant[0].companyName}`
+        const taskName = "Merchant Verification"
+        await addAgentNotification(agentEmail,taskName,message);
         res.status(201).json({
             success : "Task assigned successfully!"
         });
