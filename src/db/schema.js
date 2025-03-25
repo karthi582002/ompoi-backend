@@ -137,7 +137,7 @@ export const agent_orders_task = mysqlTable("agent_orders_task", {
 
 export const order_payments = mysqlTable("order_payments", {
     id: serial("id"),
-    orderId: varchar("order_id", {length: 255}).notNull(),
+    orderId: varchar("order_id", {length: 255}).notNull().primaryKey(),
     paymentId: varchar("payment_id",{length: 255}).notNull(),
     buyerEmail: varchar("buyer_email",{length: 255}).notNull().references(()=> buyer_registration.contactEmail,{onDelete : "cascade"}),
     amount: decimal("amount",{precision:10,scale:2}).notNull(),
