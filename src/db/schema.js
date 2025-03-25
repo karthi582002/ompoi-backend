@@ -82,7 +82,7 @@ export const master_admin = mysqlTable("master_admin", {
 });
 
 export const agent_tasks = mysqlTable("agent_tasks", {
-    id: serial("id"),
+    id: serial("id").primaryKey(),
     merchantName: varchar("merchantName",{length : 255}).notNull(),
     merchantEmail : varchar("merchantEmail",{length : 255}).notNull().references(()=> merchant_registration.email,{onDelete: "cascade"}),
     agentName: varchar("agentName",{length : 255}).notNull(),
