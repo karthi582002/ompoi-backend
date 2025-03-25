@@ -12,6 +12,7 @@ router.post("/registration", registerAgentController);
 router.post("/login", loginAgent);
 router.post("/verify-merchant",protectAgentRoute,aproveMerchantController)
 router.post("/verify-order",protectAgentRoute, aproveOrderController);
+router.get("/notifications",protectAgentRoute,getAgentNotifications);
 // router.get("/",test_join)
 router.get("/",protectAgentRoute,(req,res)=>{
     res.status(200).json({
