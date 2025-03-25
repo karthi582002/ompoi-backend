@@ -17,6 +17,11 @@ export const approveMerchant = async (agent_email,merchant_email) => {
         .where(eq(merchant_registration.email,merchant_email));
 }
 
+
+export const checkVerifiedMerchant = async (merchant_email) => {
+    return db.select().from(verified_merchant).where(eq(verified_merchant.merchant_email,merchant_email));
+}
+
 export const insertVerifiedMerchant = async (agent_email,merchant_email) => {
     return db.insert(verified_merchant).values({agent_email,merchant_email});
 }
