@@ -48,3 +48,11 @@ export const addAgentNameToOrderTable = async (agentEmail,orderId) => {
             eq(orderId,orders.orderId),
         )
 }
+
+export const addAgentNotification = async (agentEmail,taskName,message) => {
+    return db.insert(agent_notifications).values({
+        agentId:agentEmail,
+        taskName:taskName,
+        message:message,
+    })
+}
