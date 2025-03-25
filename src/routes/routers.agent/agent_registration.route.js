@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-    aproveMerchantController, aproveOrderController,
+    aproveMerchantController, aproveOrderController, getAgentNotifications,
     loginAgent,
     registerAgentController, test_join
 } from "../../controller/agent.controller/agent_register.controller.js";
