@@ -91,6 +91,7 @@ export const aproveMerchantController = async (req,res) => {
        console.log(agent_email,merchant_email)
        await insertVerifiedMerchant(agent_email, merchant_email);
        await approveMerchant(agent_email, merchant_email);
+       await updateMerchantTaskCompletion (agent_email,true)
        res.status(200).json({
            message: 'Merchant Approved Successfully',
        })
