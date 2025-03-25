@@ -76,7 +76,7 @@ export const sku_resources = mysqlTable("sku_resources", {
 
 export const master_admin = mysqlTable("master_admin", {
     id: serial("id"),
-    adminEmail : varchar("adminEmail",{length : 255}).notNull(),
+    adminEmail : varchar("adminEmail",{length : 255}).notNull().primaryKey(),
     adminPassword : varchar("adminPassword",{length : 255}).notNull(),
     createdAt: timestamp("created_at").defaultNow(),
 });
