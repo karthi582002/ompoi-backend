@@ -106,8 +106,8 @@ export const register =  async (req, res) => {
             const decoded = jwt.verify(otpToken, process.env.JWT_SECRET);
             phone = decoded.contactPhone;
             if(req.body.contactPhone !== phone) {
-                return res.status(400).json({
-                    error: "Invalid phone number",
+                return res.status(403).json({
+                    error: "Enter the Same Phone Number That Verified",
                 })
             }
         } catch (err) {
