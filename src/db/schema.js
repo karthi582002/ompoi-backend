@@ -87,6 +87,7 @@ export const agent_tasks = mysqlTable("agent_tasks", {
     merchantEmail : varchar("merchantEmail",{length : 255}).notNull().references(()=> merchant_registration.email,{onDelete: "cascade"}),
     agentName: varchar("agentName",{length : 255}).notNull(),
     agentEmail : varchar("agentEmail",{length : 255}).notNull().references(()=> agent_registration.agent_email,{onDelete: "cascade"}),
+    status: boolean("status").default(false),
     createdAt: timestamp("createdAt").defaultNow(),
 })
 
