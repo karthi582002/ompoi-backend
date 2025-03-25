@@ -28,7 +28,7 @@ export const agent_registration = mysqlTable("agent_registration", {
 })
 
 export const verified_merchant = mysqlTable("verified_merchant", {
-    id: serial("id"),
+    id: serial("id").primaryKey(),
     agent_email : varchar("agent_email",{length : 255}).notNull().references(()=> agent_registration.agent_email,{onDelete : "cascade"}),
     merchant_email : varchar("merchant_email",{length : 255}).notNull().references(()=> merchant_registration.email,{onDelete : "cascade"}),
 })
