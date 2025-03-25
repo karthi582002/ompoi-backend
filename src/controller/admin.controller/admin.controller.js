@@ -77,8 +77,8 @@ export const assignSellerToAgent = async (req, res) => {
         }
         const existingMerchant = await checkMerchantInTaskTable(data.merchantEmail)
         if(existingMerchant.length !== 0){
-            return res.status(404).json({
-                error: "This Merchant already assigned."
+            return res.status(409).json({
+                error: "This Merchant already assigned. or Verified By Another Merchant"
             })
         }
         await assignTaskToAgent(data);
