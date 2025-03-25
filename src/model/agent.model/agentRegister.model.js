@@ -87,3 +87,19 @@ export const addVerifiedStatusInOrder = async (order_id,agent_email) => {
             )
         );
 }
+
+export const getAgentNotificationsFromDB = async(agentEmail) =>{
+    return db.select().from(agent_notifications).where(
+        eq(agent_notifications.agentId,agentEmail)
+    )
+}
+
+export const markAsReadAgentNotifications = async(agentEmail) =>{
+    return db.update(agent_notifications)
+        .set({
+            isRead:true,
+        })
+        .where(
+        eq(agent_notifications.agentId,agentEmail)
+    )
+}
