@@ -96,6 +96,6 @@ app.use("/buyer",buyerRoute)
 
 
 app.get("/", (req, res) => {
-    res.send("Welcome to the Karthi!");
+    res.send("Welcome to the OMPOI - Backend Server is Working Fine!");
 })
 export default app;
