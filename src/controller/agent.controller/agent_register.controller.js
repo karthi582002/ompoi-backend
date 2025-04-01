@@ -180,3 +180,15 @@ export const getAgentNotifications = async (req,res) => {
         })
     }
 }
+
+export const authCookieAgent = async(req, res) => {
+    try{
+        const  agent = req.agent
+        console.log(req)
+        return res.status(200).json({agent: agent})
+    }catch(err){
+        return res.status(401).send({
+            message:"Invalid Token",
+        })
+    }
+}
