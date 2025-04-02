@@ -192,3 +192,18 @@ export const authCookieAgent = async(req, res) => {
         })
     }
 }
+
+export const getPendingAgentTasks = async (req,res) => {
+    try{
+        const agent = req.agent[0].agent_email;
+        const tasks =  await pendingTasks(agent)
+        console.log(tasks)
+        return res.status(200).json({
+            tasks: tasks
+        })
+    }catch (err){
+        return res.status(500).send({
+            message:"Internal Server Error",
+        })
+    }
+}
