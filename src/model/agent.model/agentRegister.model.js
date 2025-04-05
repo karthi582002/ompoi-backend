@@ -122,3 +122,13 @@ export const pendingTasks = async (agent_email) =>{
             eq(agent_tasks.status,"false")
         ))
 }
+
+export const getTotalMergeTasks = async(agent_email) =>{
+    const merchantTasks = await db.select().from(agent_tasks).where(
+        eq(agent_tasks.agentEmail,agent_email),
+    )
+    const orderTask = await db.select().from(agent_orders_task).where(
+        eq(agent_orders_task.agentEmail,agent_email),
+    )
+    return merchantTasks.length + orderTask.length;
+}
