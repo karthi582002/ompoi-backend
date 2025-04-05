@@ -207,3 +207,20 @@ export const getPendingAgentTasks = async (req,res) => {
         })
     }
 }
+
+export const agentLogout = async(req, res) => {
+    try{
+        res.clearCookie("agent_jwt",{
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict"
+        })
+        return res.status(200).json({
+            message: 'Merchant loggedOut',
+        })
+    }catch(err){
+        res.status(401).send({
+            error:"Unable to Logout.."
+        })
+    }
+}
