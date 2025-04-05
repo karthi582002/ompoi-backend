@@ -114,3 +114,11 @@ export const markAsReadAgentNotifications = async(agentEmail) =>{
         eq(agent_notifications.agentId,agentEmail)
     )
 }
+
+export const pendingTasks = async (agent_email) =>{
+    return db.select().from(agent_tasks).where(
+        and(
+            eq(agent_tasks.agentEmail,agent_email),
+            eq(agent_tasks.status,"false")
+        ))
+}
