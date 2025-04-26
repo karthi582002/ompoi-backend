@@ -1,16 +1,27 @@
 import bcrypt from "bcrypt";
 import {
     addVerifiedStatusInOrder,
-    approveMerchant, checkValidOrderVerify, checkValidVerify, checkVerifiedMerchant,
-    getAgentByEmail, getAgentNotificationsFromDB,
-    insertVerifiedMerchant, markAsReadAgentNotifications,
-    registerAgent, selectData, updateMerchantTaskCompletion
+    approveMerchant,
+    checkValidOrderVerify,
+    checkValidVerify,
+    checkVerifiedMerchant,
+    completedMerchantVerification,
+    completedOrderVerification,
+    getAgentByEmail,
+    getAgentNotificationsFromDB,
+    getTotalMergeTasks,
+    insertVerifiedMerchant,
+    markAsReadAgentNotifications,
+    pendingTasks,
+    registerAgent,
+    selectData,
+    updateMerchantTaskCompletion
 } from "../../model/agent.model/agentRegister.model.js";
 import {generateAgentToken} from "../../utils/generateToken..js";
-import {getUserByEmail} from "../../model/register.model.js";
+import {getUserByEmail, getUserData} from "../../model/register.model.js";
 
 
-
+// this controller can be accessed bby only admin in out application
 export const registerAgentController = async (req,res) => {
     try{
         const salt = await bcrypt.genSalt(12);
@@ -41,11 +52,12 @@ export const loginAgent = async (req,res) => {
     try{
         const {agent_email, agent_password} = req.body;
         if(!agent_email || !agent_password){
-            return res.status(400).json({
+            return res.status(404).json({
                 message: 'Incorrect email or password',
             })
         }
         const agent = await getAgentByEmail(agent_email);
+        console.log(agent);
         if(agent.length === 0){
             return res.status(404).json({
                 message: 'User Not Found',
@@ -60,6 +72,11 @@ export const loginAgent = async (req,res) => {
         generateAgentToken(agent_email,res);
         return res.status(200).json({
             message: 'Agent Login Successfully',
+            data:{
+                agent_name:agent[0]?.agent_name,
+                agent_email:agent[0]?.agent_email,
+                agent_phone:agent[0]?.agent_number,
+            },
         })
     }catch(error){
         console.log(error)
@@ -216,11 +233,47 @@ export const agentLogout = async(req, res) => {
             sameSite: "strict"
         })
         return res.status(200).json({
-            message: 'Merchant loggedOut',
+            message: 'Agent loggedOut',
         })
     }catch(err){
         res.status(401).send({
             error:"Unable to Logout.."
+        })
+    }
+}
+
+export const getStatsForTasks = async (req,res) => {
+    try{
+        const agent = req.agent[0].agent_email;
+        const totalTasks =  await getTotalMergeTasks(agent)
+        const merchantApproved =  await completedMerchantVerification(agent)
+        // console.log(merchantApproved)
+        const orderApproved =  await completedOrderVerification(agent)
+        return res.status(200).json({
+            totalTasks:totalTasks,
+            merchantApproved:merchantApproved.length,
+            orderApproved:orderApproved.length,
+        })
+    }catch(err){
+        console.log(err)
+        res.status(500).send({
+            error:"Internal Server Error",
+        })
+    }
+}
+
+export const getMerchantData = async (req,res) =>{
+    try{
+        const id = req.params.id;
+        const data = await getUserData(id)
+        console.log(data)
+        return res.status(200).json({
+            data: data,
+        })
+    }catch(err){
+        console.log("Error in getting merchant data : ",err)
+        res.status(500).send({
+            error:"Internal Server Error",
         })
     }
 }

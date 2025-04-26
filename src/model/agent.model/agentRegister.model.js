@@ -1,5 +1,6 @@
 import {
     agent_notifications,
+    agent_orders_task,
     agent_registration,
     agent_tasks,
     merchant_registration,
@@ -115,21 +116,54 @@ export const markAsReadAgentNotifications = async(agentEmail) =>{
     )
 }
 
-export const pendingTasks = async (agent_email) =>{
+export const pendingTasks = async (agent_email) => {
+    return db.select({
+        agentEmail: agent_tasks.agentEmail,
+        agentName: agent_tasks.agentName,
+        createdAt: agent_tasks.createdAt,
+        id: agent_tasks.id,
+        merchantEmail: agent_tasks.merchantEmail,
+        merchantName: agent_tasks.merchantName,
+        status: agent_tasks.status,
+        contactPerson: merchant_registration.contactName,
+        location: merchant_registration.location, // optional, if you want more info
+        sellerCategory: merchant_registration.sellerCategory,
+    })
+        .from(agent_tasks)
+        .innerJoin(
+            merchant_registration,
+            eq(agent_tasks.merchantEmail, merchant_registration.email)
+        )
+        .where(
+            and(
+                eq(agent_tasks.agentEmail, agent_email),
+                eq(agent_tasks.status, false)
+            )
+        );
+};
+
+export const completedMerchantVerification = async (agent_email) =>{
     return db.select().from(agent_tasks).where(
         and(
             eq(agent_tasks.agentEmail,agent_email),
-            eq(agent_tasks.status,"false")
+            eq(agent_tasks.status,true)
         ))
 }
 
 
-
 export const pendingOrderTasks = async (agent_email) =>{
-    return db.select().from(agent_tasks).where(
+    return db.select().from(agent_orders_task).where(
         and(
             eq(agent_orders_task.agentEmail,agent_email),
             eq(agent_orders_task.status,"false")
+        ))
+}
+
+export const completedOrderVerification = async (agent_email) =>{
+    return db.select().from(agent_orders_task).where(
+        and(
+            eq(agent_orders_task.agentEmail,agent_email),
+            eq(agent_orders_task.status,"true")
         ))
 }
 
@@ -141,4 +175,11 @@ export const getTotalMergeTasks = async(agent_email) =>{
         eq(agent_orders_task.agentEmail,agent_email),
     )
     return merchantTasks.length + orderTask.length;
+}
+
+export const getAllAgentsFromDatabase = async () => {
+    return db.select({
+        agent_name:agent_registration.agent_name,
+        agent_email : agent_registration.agent_email
+    }).from(agent_registration);
 }

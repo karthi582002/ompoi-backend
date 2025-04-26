@@ -22,8 +22,9 @@ export const generateAgentToken = (agent_email,res) =>{
         const token = jwt.sign({agent_email:agent_email},process.env.JWT_AGENT_SECRET,{expiresIn: '1hr'})
         res.cookie('agent_jwt',token,{
             maxAge: 60*60*60*1000,
+            // maxAge: 30*1000,
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: 'None',
             secure: process.env.NODE_ENV !== 'development',
         })
     }catch(err){

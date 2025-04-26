@@ -11,9 +11,9 @@ export default defineConfig({
     //     connectionString: process.env.DATABASE_URL, // Ensure this is correctly set in .env
     // },
     dbCredentials: {
-        host: "127.0.0.1",
+        host: "mysql-2a07e7bf-karthi-ompoi.f.aivencloud.com",
         user: process.env.SQL_USERNAME,
         database: process.env.SQL_DATABASE,
         password: process.env.SQL_PASSWORD,
-        port:'3306'
+        port:'27486'
     }});

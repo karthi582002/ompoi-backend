@@ -34,6 +34,7 @@ export const protectedMerchantRoute =async (req, res,next) => {
 export const protectAgentRoute = async (req, res,next) => {
     try{
         const token = req.cookies.agent_jwt;
+        console.log(token)
         if(!token){
             return res.status(401).json({error : "Token Not Available"});
         }
@@ -61,7 +62,10 @@ export const protectAdminRoute = async (req, res,next) =>{
     try{
         const token = req.cookies.admin_jwt
         if(!token){
-            return res.status(401).json({error : "Token Not Available"});
+            return res.status(401).json({
+                error : "Token Not Available",
+                message:"Login and try again"
+            });
         }
         const decoded = jwt.verify(token,process.env.JWT_ADMIN_SECRET);
         if(!decoded){

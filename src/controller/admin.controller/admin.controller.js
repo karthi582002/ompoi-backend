@@ -1,15 +1,27 @@
 import {
-    addAdmin, addAgentNameToOrderTable, addAgentNotification,
-    assignTaskToAgent, assignTaskToAgentOrders,
-    checkMerchantInTaskTable, checkOrderInTaskTable,
-    getAdminByEmail
+    addAdmin,
+    addAgentNameToOrderTable,
+    addAgentNotification,
+    assignTaskToAgent,
+    assignTaskToAgentOrders,
+    checkMerchantInTaskTable,
+    checkOrderInTaskTable,
+    getAdminByEmail,
+    getAllUnverifiedMerchantsFromDatabase,
+    getAllUnverifiedOrdersFromDataBase,
+    getMerchantVerifyTableDataFromDatabase, getOrdersSummary,
+    getOrdersVerifyTableDataFromDatabase,
+    getTotalAgents,
+    getTotalOrders, getTotalRegistration, getTotalRevenue,
+    getTotalSellers
 } from "../../model/admin.model/admin.model.js";
 import bcrypt from "bcrypt";
 import {generateAdminToken} from "../../utils/generateToken..js";
 import {getMerchantDetails, getMerchantID} from "../../model/merchant.model.js";
-import {getAgentByEmail} from "../../model/agent.model/agentRegister.model.js";
+import {getAgentByEmail, getAllAgentsFromDatabase} from "../../model/agent.model/agentRegister.model.js";
 import {getUserByEmail} from "../../model/register.model.js";
 import {fetchSpecificOrderByOrderID} from "../../model/buyer.model/buyer.model.js";
+import res from "express/lib/response.js";
 
 export const registerAdmin = async (req, res) => {
     try {
@@ -137,6 +149,96 @@ export const assignOrderVerificationToAgent = async (req, res) => {
         res.status(200).send(taskDetails);
     }catch(err){
         console.log("Error in Admin Controlller " +err);
+        return res.status(500).send("Internal Server Error");
+    }
+}
+
+export const getAllAgents = async (req,res) => {
+    try{
+        const agents = await getAllAgentsFromDatabase(req,res);
+        // console.log(agents)
+        return res.status(200).send(agents);
+    }catch(err){
+        console.log("Error in getting all agents Admin Controller");
+        return res.status(500).send("Internal Server Error");
+    }
+}
+
+
+export const getAllUnverifiedMerchants = async(req,res) =>{
+    try{
+        const merchants = await getAllUnverifiedMerchantsFromDatabase();
+        // console.log(merchants)
+        return res.status(200).json(merchants);
+    }catch (err) {
+        console.log("Error in getting all unverified merchants Admin Controller");
+        return res.status(500).json({"Error": "Internal Server Error"});
+    }
+}
+
+
+export const getAllUnverifiedOrders = async(req,res) =>{
+    try{
+        const orders = await getAllUnverifiedOrdersFromDataBase();
+        return res.status(200).send(orders);
+    }catch(err){
+        console.log("Error in getting all unverified orders Admin Controller");
+        return res.status(500).send("Internal Server Error");
+    }
+}
+
+export const getMerchantVerifyTableData = async(req,res) =>{
+    try{
+        const data = await getMerchantVerifyTableDataFromDatabase()
+        // console.log(data)
+        return res.status(200).send(data)
+    }catch(err){
+        console.log("Error In getting table data for merchant agent task", err)
+        return res.status(500).send("Internal Server Error");
+    }
+}
+
+export const getOrdersVerifyTableData = async(req,res) =>{
+    try {
+        const data = await getOrdersVerifyTableDataFromDatabase()
+        console.log(data)
+        res.status(200).send(data)
+    }catch(err){
+        console.log("Error in getting orders VerifyTableData for orders data", err);
+        return res.status(500).send("Internal Server Error");
+    }
+}
+
+export const getMerchantRegistrationAnalytics = async(req,res) =>{
+    try{
+        let totalAgents = await getTotalAgents();
+        let totalOrders = await getTotalOrders();
+        let totalSellers = await getTotalSellers();
+        let totalRevenue = await getTotalRevenue();
+        let totalRegistration = await getTotalRegistration();
+        res.status(200).json({
+            totalAgents : totalAgents,
+            totalOrders : totalOrders,
+            totalSellers : totalSellers,
+            totalRevenue: totalRevenue,
+            totalRegistration : totalRegistration,
+        });
+        console.log(totalAgents)
+    }catch (err){
+        console.log("Error in getting analytics for merchant registration",err);
+        return res.status(500).send("Internal Server Error");
+    }
+}
+
+export const getOrdersStatus = async(req,res) =>{
+    try {
+        const {totalOrders,totalVerifiedOrders} = await getOrdersSummary();
+        res.status(200).json({
+            totalOrders : totalOrders,
+            totalVerifiedOrders : totalVerifiedOrders,
+        });
+    }catch (err){
+        console.log("Error in getting analytics for orders ",err);
         return res.status(500).send("Internal Server Error");
     }
 }
