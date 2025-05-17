@@ -4,19 +4,31 @@ import {
     getProductByProductId, getProductImagesById, getProductImagesByIdWithMerchantId
 } from "../../model/buyer.model/product.model.js";
 
-export const fetchAllProducts = async(req,res)=>{
-    // const merchantId = req.merchant[0]?.merchantId;
-    try{
-        const products = await getAllProducts()
-        res.status(200).json(products)
-    }catch(err){
-        console.log("Error while Fetching Products : "+err);
-        res.status(500).send({
-            error: "Internal Server Error",
-        });
+export const fetchAllProducts = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
 
+    const sortBy = req.query.sortBy || "unitPrice"; // Default sort field
+    const order = req.query.order === "desc" ? "desc" : "asc"; // Default: ascgit remote -v
+
+    try {
+        const [products, total] = await getAllProducts(limit, offset, sortBy, order);
+        const totalPages = Math.ceil(total / limit);
+
+        res.status(200).json({
+            data: products,
+            page,
+            totalPages,
+            totalItems: total
+        });
+    } catch (err) {
+        console.error("Error while Fetching Products:", err);
+        res.status(500).json({ error: "Internal Server Error" });
     }
-}
+};
+
+
 
 export const fetchSpecificProducts = async(req,res)=>{
     try {

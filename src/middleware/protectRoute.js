@@ -59,6 +59,7 @@ export const protectAgentRoute = async (req, res,next) => {
 }
 
 export const protectAdminRoute = async (req, res,next) =>{
+    console.log(req.cookies)
     try{
         const token = req.cookies.admin_jwt
         if(!token){

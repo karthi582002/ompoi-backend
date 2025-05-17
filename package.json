@@ -8,7 +8,7 @@
     "db:push": "npx drizzle-kit push",
     "db:studio": "npx drizzle-kit studio",
     "dev:server": "nodemon src/server.js",
-    "test:prod:db" : "npx drizzle-kit introspect"
+    "test:prod:db": "npx drizzle-kit introspect"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
   "description": "",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cloc": "^2.4.0-cloc",
     "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -25,12 +26,15 @@
     "express-rate-limit": "^7.5.0",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
     "mysql2": "^3.12.0",
     "nodemon": "^3.1.9",
     "razorpay": "^2.9.5",
-    "twilio": "^5.4.3"
+    "swagger-ui-express": "^5.0.1",
+    "twilio": "^5.4.3",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "drizzle-kit": "^0.30.4"

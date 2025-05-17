@@ -1,6 +1,5 @@
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-// import { CloudinaryStorage } from "multer-cloudinary-storage";
 import { v2 as cloudinary } from "cloudinary";
 
 

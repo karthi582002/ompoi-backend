@@ -38,9 +38,9 @@ export const generateAdminToken = (admin_email,res) =>{
         console.log(admin_email)
         const token = jwt.sign({admin_email:admin_email},process.env.JWT_ADMIN_SECRET,{expiresIn: '1hr'})
         res.cookie('admin_jwt',token,{
-            maxAge: 60*60*60*1000,
+            maxAge: 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: 'lax',
             secure: process.env.NODE_ENV !== 'development',
         });
     }catch(err){

@@ -65,12 +65,15 @@ export const checkValidVerify = async (merchant_email,agent_email) => {
         );
 }
 
-export const updateMerchantTaskCompletion = async(agent_email,status) => {
+export const updateMerchantTaskCompletion = async(agent_email,merchant_email,status) => {
     return db.update(agent_tasks).
     set({
         status: status,
     }).where(
-            eq(agent_tasks.agentEmail,agent_email),
+            and(
+                eq(agent_tasks.agentEmail,agent_email),
+                eq(agent_tasks.merchantEmail,merchant_email)
+            ),
     )
 }
 

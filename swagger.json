@@ -1,0 +1,1105 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "College_Backend",
+    "version": "1.0.0",
+    "description": "API documentation for College Backend system"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    },
+    {
+      "url": "http://localhost:3001",
+      "description": "Alternative local development server"
+    }
+  ],
+  "paths": {
+    "/admin/register": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Register Master Admin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "admin@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Admin registered successfully"
+          }
+        }
+      }
+    },
+    "/admin/login": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Admin Login",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "admin@ompoi.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Admin logged in successfully"
+          }
+        }
+      }
+    },
+    "/admin/fetch-all-agents": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get All Agents",
+        "responses": {
+          "200": {
+            "description": "List of all agents retrieved successfully"
+          }
+        }
+      }
+    },
+    "/admin/assign-agent-seller": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Assign Task to Agents",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "agentEmail": {
+                    "type": "string",
+                    "example": "rahul@gmail.com"
+                  },
+                  "merchantEmail": {
+                    "type": "string",
+                    "example": "karthikeyan.m@guvi.in"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task assigned to agent successfully"
+          }
+        }
+      }
+    },
+    "/admin/assign-agent-order": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Assign order Task to Agents",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "agentEmail": {
+                    "type": "string",
+                    "example": "mani@gmail.com"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "example": "GOP-126-03032025-2-6454"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order task assigned to agent successfully"
+          }
+        }
+      }
+    },
+    "/admin/fetch-all-unverified-merchants": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get All Unverified Merchant",
+        "responses": {
+          "200": {
+            "description": "List of unverified merchants retrieved successfully"
+          }
+        }
+      }
+    },
+    "/admin/fetch-all-unverified-orders": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get All Unverified Orders",
+        "responses": {
+          "200": {
+            "description": "List of unverified orders retrieved successfully"
+          }
+        }
+      }
+    },
+    "/admin/merchant-verify-table": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Task Table MerchantVerify",
+        "responses": {
+          "200": {
+            "description": "Merchant verification task table retrieved successfully"
+          }
+        }
+      }
+    },
+    "/admin/orders-verify-table": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Task Table orderVerify",
+        "responses": {
+          "200": {
+            "description": "Order verification task table retrieved successfully"
+          }
+        }
+      }
+    },
+    "/admin/summary-analytics": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Analytics summary",
+        "responses": {
+          "200": {
+            "description": "Analytics summary retrieved successfully"
+          }
+        }
+      }
+    },
+    "/admin/orders-status": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Analytics order summary",
+        "responses": {
+          "200": {
+            "description": "Order status analytics retrieved successfully"
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Register",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "companyName": {
+                    "type": "string",
+                    "example": "ABC Traders"
+                  },
+                  "contactName": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "sellerCategory": {
+                    "type": "string",
+                    "example": "Electronics"
+                  },
+                  "contactPhone": {
+                    "type": "string",
+                    "example": "9710051702"
+                  },
+                  "contactAltPhone": {
+                    "type": "string",
+                    "example": "9123456789"
+                  },
+                  "gstNumber": {
+                    "type": "string",
+                    "example": "27AABCU9603R1ZV"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "123, Main Street, Chennai, India"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "SecurePass@123"
+                  },
+                  "sellerDocuments": {
+                    "type": "string",
+                    "example": "document_link.pdf"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Merchant registered successfully"
+          }
+        }
+      }
+    },
+    "/register/status": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Status of merchant",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "karthi582002@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Merchant status retrieved successfully"
+          }
+        }
+      }
+    },
+    "/otp": {
+      "post": {
+        "tags": ["OTP - Verification"],
+        "summary": "Send Otp to Phone Using Email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "contactPhone": {
+                    "type": "string",
+                    "example": "+919710051702"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP sent successfully"
+          }
+        }
+      }
+    },
+    "/merchant/forget-password": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Forget Password",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "karthi582002@gmail.com"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "example": "123456789"
+                  },
+                  "otp": {
+                    "type": "integer",
+                    "example": 76066093
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          }
+        }
+      }
+    },
+    "/merchant/id/": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Get Merchant ID",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "ivi@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Merchant ID retrieved successfully"
+          }
+        }
+      }
+    },
+    "/payment/create-order": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Initial Payment Request",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "karthikeyan@gmail.comm"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "987654321"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Payment order created successfully"
+          }
+        }
+      }
+    },
+    "/register/checkuser": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "CheckUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "karthi582002@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User check completed successfully"
+          }
+        }
+      }
+    },
+    "/merchant/login": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Merchant Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "merchantId": {
+                    "type": "string",
+                    "example": "TAM93733"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Mk.582002"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Merchant logged in successfully"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Merchant Logout",
+        "responses": {
+          "200": {
+            "description": "Merchant logged out successfully"
+          }
+        }
+      }
+    },
+    "/auth/check-merchant": {
+      "get": {
+        "tags": ["Merchant"],
+        "summary": "Merchant Cookie Check",
+        "responses": {
+          "200": {
+            "description": "Merchant cookie check completed"
+          }
+        }
+      }
+    },
+    "/merchant/me": {
+      "get": {
+        "tags": ["Merchant"],
+        "summary": "About Me",
+        "responses": {
+          "200": {
+            "description": "Merchant details retrieved successfully"
+          }
+        }
+      }
+    },
+    "/register/check-agent": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Check assigned Agent For Verification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "ivi@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Assigned agent checked successfully"
+          }
+        }
+      }
+    },
+    "/register/gst-verification": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "GST Verification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "gstNumber": {
+                    "type": "string",
+                    "example": "27AIFPH3584H1Z5"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "GST verification completed"
+          }
+        }
+      }
+    },
+    "/merchant/add-products": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Add Products",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sku": {
+                    "type": "string",
+                    "example": "GOP-127"
+                  },
+                  "grade": {
+                    "type": "string",
+                    "example": "Raw"
+                  },
+                  "subGrade": {
+                    "type": "string",
+                    "example": "Null"
+                  },
+                  "origin": {
+                    "type": "string",
+                    "example": "Tanzania"
+                  },
+                  "quality": {
+                    "type": "string",
+                    "example": "Premium"
+                  },
+                  "color": {
+                    "type": "string",
+                    "example": "Light Brown"
+                  },
+                  "packing": {
+                    "type": "string",
+                    "example": "80Kg Sack"
+                  },
+                  "quantity": {
+                    "type": "string",
+                    "example": "5"
+                  },
+                  "unitPrice": {
+                    "type": "string",
+                    "example": "7000"
+                  },
+                  "moisture": {
+                    "type": "string",
+                    "example": "Yes"
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Products added successfully"
+          }
+        }
+      }
+    },
+    "/merchant/update-product/": {
+      "put": {
+        "tags": ["Merchant"],
+        "summary": "Update Product",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sku": {
+                    "type": "string",
+                    "example": "GOP-127"
+                  },
+                  "grade": {
+                    "type": "string",
+                    "example": "Raw"
+                  },
+                  "subGrade": {
+                    "type": "string",
+                    "example": "Null"
+                  },
+                  "origin": {
+                    "type": "string",
+                    "example": "Tanzania"
+                  },
+                  "quality": {
+                    "type": "string",
+                    "example": "Premium"
+                  },
+                  "color": {
+                    "type": "string",
+                    "example": "Light brown"
+                  },
+                  "packing": {
+                    "type": "string",
+                    "example": "20 Kgs Tin"
+                  },
+                  "quantity": {
+                    "type": "string",
+                    "example": "5"
+                  },
+                  "unitPrice": {
+                    "type": "string",
+                    "example": "9000"
+                  },
+                  "moisture": {
+                    "type": "string",
+                    "example": "Yes"
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated successfully"
+          }
+        }
+      }
+    },
+    "/merchant/update/order": {
+      "post": {
+        "tags": ["Merchant"],
+        "summary": "Update Order Status",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "orderId": {
+                    "type": "string",
+                    "example": "GOP-124-03032025-2-1276"
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "processing"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order status updated successfully"
+          }
+        }
+      }
+    },
+    "/agent/login": {
+      "post": {
+        "tags": ["Agent"],
+        "summary": "Agent Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "agent_email": {
+                    "type": "string",
+                    "example": "mani@gmail.com"
+                  },
+                  "agent_name": {
+                    "type": "string",
+                    "example": "Mani"
+                  },
+                  "agent_number": {
+                    "type": "integer",
+                    "example": 1234567899
+                  },
+                  "agent_password": {
+                    "type": "string",
+                    "example": "12345674"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent logged in successfully"
+          }
+        }
+      }
+    },
+    "/agent/verify-merchant": {
+      "post": {
+        "tags": ["Agent"],
+        "summary": "Seller Approval",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "merchant_email": {
+                    "type": "string",
+                    "example": "karthikeyan.m@guvi.in"
+                  },
+                  "agent_email": {
+                    "type": "string",
+                    "example": "gopal@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Merchant verified successfully"
+          }
+        }
+      }
+    },
+    "/agent/": {
+      "get": {
+        "tags": ["Agent"],
+        "summary": "Verified Sellers",
+        "responses": {
+          "200": {
+            "description": "Verified sellers list retrieved successfully"
+          }
+        }
+      }
+    },
+    "/agent/verify-order": {
+      "post": {
+        "tags": ["Agent"],
+        "summary": "Order Verification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "order_id": {
+                    "type": "string",
+                    "example": "GOP-126-03032025-2-6454"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order verified successfully"
+          }
+        }
+      }
+    },
+    "/otp/verify-otp": {
+      "post": {
+        "tags": ["OTP - Verification"],
+        "summary": "Verify Otp",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "contactPhone": {
+                    "type": "string",
+                    "example": "+919710051702"
+                  },
+                  "otp": {
+                    "type": "integer",
+                    "example": 18506284
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully"
+          }
+        }
+      }
+    },
+    "/auth/check-buyer": {
+      "get": {
+        "tags": ["Buyer"],
+        "summary": "Buyer Cookie Check",
+        "responses": {
+          "200": {
+            "description": "Buyer cookie check completed"
+          }
+        }
+      }
+    },
+    "/buyer/register": {
+      "post": {
+        "tags": ["Buyer"],
+        "summary": "Registration",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "companyName": {
+                    "type": "string",
+                    "example": "Tech Solutions Ltd."
+                  },
+                  "contactName": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "contactEmail": {
+                    "type": "string",
+                    "example": "johndoe@example.comm"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "12345678901"
+                  },
+                  "contactPhone": {
+                    "type": "string",
+                    "example": "+123456789010"
+                  },
+                  "billingAddress": {
+                    "type": "string",
+                    "example": "123 Business St, Cityville, Country"
+                  },
+                  "shippingAddress": {
+                    "type": "string",
+                    "example": "456 Warehouse Ave, Cityville, Country"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Buyer registered successfully"
+          }
+        }
+      }
+    },
+    "/buyer/login": {
+      "post": {
+        "tags": ["Buyer"],
+        "summary": "Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.comm"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "12345678901"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Buyer logged in successfully"
+          }
+        }
+      }
+    },
+    "/buyer/product/{productId}": {
+      "get": {
+        "tags": ["Buyer"],
+        "summary": "Get Specific Products",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "GOP-126"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product details retrieved successfully"
+          }
+        }
+      }
+    },
+    "/buyer/my-orders": {
+      "get": {
+        "tags": ["Buyer"],
+        "summary": "Get All Orders",
+        "responses": {
+          "200": {
+            "description": "All orders retrieved successfully"
+          }
+        }
+      }
+    },
+    "/buyer/my-orders/{orderId}": {
+      "get": {
+        "tags": ["Buyer"],
+        "summary": "Get Specific Order",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "GOP-124-18022025-2-10245"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details retrieved successfully"
+          }
+        }
+      }
+    },
+    "/buyer/create-order": {
+      "post": {
+        "tags": ["Buyer"],
+        "summary": "Create Order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string",
+                    "example": "GOP-126"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order created successfully"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Admin",
+      "description": "Admin related operations"
+    },
+    {
+      "name": "Merchant",
+      "description": "Merchant related operations"
+    },
+    {
+      "name": "Agent",
+      "description": "Agent related operations"
+    },
+    {
+      "name": "OTP - Verification",
+      "description": "OTP verification operations"
+    },
+    {
+      "name": "Buyer",
+      "description": "Buyer related operations"
+    }
+  ]
+}

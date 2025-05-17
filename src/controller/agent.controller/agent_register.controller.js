@@ -90,31 +90,32 @@ export const aproveMerchantController = async (req,res) => {
    try{
        const {merchant_email} = req.body;
        const agent_email = req.agent[0].agent_email
+       console.log(merchant_email)
        const data = req.body;
        const user = await getUserByEmail(merchant_email);
        const agent = await getAgentByEmail(agent_email);
        const checkMerchantTask = await checkValidVerify(merchant_email,agent_email);
        if(user.length === 0 || agent.length === 0){
            // console.log(agent)
-           return res.status(401).json({
+           return res.status(404).json({
                message: 'Invalid Merchant',
            })
        }
        if(checkMerchantTask.length === 0){
            return res.status(400).json({
-               error:"Your Not assigned To this seller."
+               message:"Your Not assigned To this seller."
            })
        }
        console.log(agent_email,merchant_email)
        const existsMerchant = await checkVerifiedMerchant(merchant_email)
        if(existsMerchant.length !== 0){
-           return res.status(401).json({
-               error: 'This Merchant Already Approved.',
+           return res.status(409).json({
+               message: 'This Merchant Already Approved.',
            })
        }
        await insertVerifiedMerchant(agent_email, merchant_email);
        await approveMerchant(agent_email, merchant_email);
-       await updateMerchantTaskCompletion (agent_email,true)
+       await updateMerchantTaskCompletion (agent_email,merchant_email,true)
        res.status(200).json({
            message: 'Merchant Approved Successfully',
        })

@@ -86,6 +86,7 @@ export const emailPassCheck = async (req, res) => {
 
 export const register =  async (req, res) => {
     const salt = await bcrypt.genSalt(12);
+    console.log(req.body)
     try {
         console.log("Received File:", req.file);
         console.log("Received Body:", req.body);
@@ -105,6 +106,7 @@ export const register =  async (req, res) => {
         try {
             const decoded = jwt.verify(otpToken, process.env.JWT_SECRET);
             phone = decoded.contactPhone;
+            console.log(phone,req.body.contactPhone);
             if(req.body.contactPhone !== phone) {
                 return res.status(403).json({
                     error: "Enter the Same Phone Number That Verified",
@@ -130,7 +132,7 @@ export const register =  async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: "Error adding user" });
+        res.status(500).json({ error: "Error adding user Make sure all data's are correct" });
     }
 };
 
